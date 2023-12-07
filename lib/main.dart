@@ -1,15 +1,12 @@
-import 'package:coal_tracking_app/convert_latlang_to_address.dart';
-import 'package:coal_tracking_app/current_location.dart';
-import 'package:coal_tracking_app/custom_marker.dart';
-import 'package:coal_tracking_app/custom_marker_info_window.dart';
-import 'package:coal_tracking_app/custom_marker_with_network_image.dart';
-import 'package:coal_tracking_app/google_search_places_api.dart';
-import 'package:coal_tracking_app/polygone_screen.dart';
-import 'package:coal_tracking_app/polyline_screen.dart';
-import 'package:coal_tracking_app/polyline_two.dart';
-import 'package:coal_tracking_app/views/pages/login_folder/loginpage.dart';
+import 'package:coal_tracking_app/views/pages/google_map_utils/convert_latlang_to_address.dart';
+
+import 'package:coal_tracking_app/views/navigation_container.dart';
+import 'package:coal_tracking_app/views/pages/homepage.dart';
+import 'package:coal_tracking_app/views/pages/login_folder/login_page.dart';
 import 'package:flutter/material.dart';
-import 'package:coal_tracking_app/google_map_styling_screen.dart';
+import 'package:provider/provider.dart';
+// import 'package:coal_tracking_app/google_map_styling_screen.dart';
+import 'package:get/get_navigation/get_navigation.dart';
 
 void main() {
   runApp(const MyApp());
@@ -21,7 +18,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(

@@ -1,5 +1,8 @@
 import 'dart:convert';
 
+// import 'package:coal_tracking_app/current_location.dart';
+import 'package:coal_tracking_app/views/navigation_container.dart';
+import 'package:coal_tracking_app/views/pages/homepage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:coal_tracking_app/interface/backend_interface.dart';
@@ -115,6 +118,12 @@ class _LoginPageState extends State<LoginPage> {
                   w: width * 0.9,
                   text: "Sign in",
                   onTap: () {
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute<void>(
+                            builder: (BuildContext context) =>
+                                NavigationContainer()),
+                        (route) => false);
                     // login(emailController.text.toString(),
                     //     passwordController.text.toString());
                     // if (validateAndSave() == true) {
