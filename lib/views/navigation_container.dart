@@ -1,3 +1,5 @@
+import 'package:coal_tracking_app/views/pages/empty.dart';
+import 'package:coal_tracking_app/views/pages/profile_folder/profile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
@@ -9,7 +11,7 @@ import 'package:coal_tracking_app/views/pages/homepage.dart';
 // import 'package:frontend/views/pages/onboarding_folder/age.dart';
 // import 'package:frontend/views/pages/onboarding_folder/details.dart';
 
-import 'package:coal_tracking_app/views/pages/profile_folder/profile_page.dart';
+// import 'package:coal_tracking_app/views/pages/profile_folder/profile_page.dart';
 // import 'package:frontend/views/pages/expense_folder/statistics.dart';
 // import 'package:frontend/views/pages/splash_screen.dart';
 import 'package:get/get.dart';
@@ -26,7 +28,7 @@ class _NavigationContainerState extends State<NavigationContainer> {
 
   //
 
-  List Screen = [HomePage(), ProfilePage(), ProfilePage(), ProfilePage()];
+  List Screen = [HomePage(), Empty(), Empty(), Profile()];
 
   @override
   Widget build(BuildContext context) {
