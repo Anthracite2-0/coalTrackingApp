@@ -1,4 +1,13 @@
+import 'package:coal_tracking_app/convert_latlang_to_address.dart';
 import 'package:coal_tracking_app/current_location.dart';
+import 'package:coal_tracking_app/custom_marker.dart';
+import 'package:coal_tracking_app/custom_marker_info_window.dart';
+import 'package:coal_tracking_app/custom_marker_with_network_image.dart';
+import 'package:coal_tracking_app/google_search_places_api.dart';
+import 'package:coal_tracking_app/polygone_screen.dart';
+import 'package:coal_tracking_app/polyline_screen.dart';
+import 'package:coal_tracking_app/polyline_two.dart';
+import 'package:coal_tracking_app/views/pages/login_folder/loginpage.dart';
 import 'package:flutter/material.dart';
 import 'package:coal_tracking_app/google_map_styling_screen.dart';
 
@@ -18,7 +27,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.deepOrange,
       ),
-      home: CurrentLocationScreen(),
+      home: LoginPage(),
     );
   }
 }
