@@ -1,5 +1,6 @@
 // import 'package:coal_tracking_app/current_location.dart';
 import 'package:coal_tracking_app/views/pages/google_map_utils/current_location.dart';
+import 'package:coal_tracking_app/views/pages/qr_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -18,7 +19,7 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: Colors.black,
         onPressed: () {
-          Get.to(() => CurrentLocationScreen());
+          Get.to(() => QRSCreen());
         },
         label: const Text("Scan the QR"),
         icon: const Icon(Icons.qr_code_scanner_outlined),
