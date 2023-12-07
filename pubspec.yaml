@@ -16,7 +16,7 @@ dependencies:
   geolocator: ^8.0.5
   flutter_geocoder: ^0.2.2-nullsafety
   geocoding: ^2.0.4
-  flutter_polyline_points: ^1.0.0
+  flutter_polyline_points: ^2.0.0
 
   modal_bottom_sheet: ^2.0.1
 
@@ -27,6 +27,13 @@ dependencies:
   path_provider:
   image:
   image_picker:
+  get: ^4.6.5
+  flutter_svg: ^2.0.9
+  flutter_screenutil: ^5.9.0
+  lottie: ^2.6.0
+  animated_theme_switcher: ^2.0.9
+  url_launcher: ^6.1.14
+  flutter_secure_storage: ^9.0.0
 
 
 dev_dependencies:
