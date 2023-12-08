@@ -124,59 +124,6 @@ class _LoginPageState extends State<LoginPage> {
                             builder: (BuildContext context) =>
                                 NavigationContainer()),
                         (route) => false);
-                    // login(emailController.text.toString(),
-                    //     passwordController.text.toString());
-                    // if (validateAndSave() == true) {
-                    //   setState(() {
-                    //     isApiCallProcess = true;
-                    //   });
-                    //   // if (isApiCallProcess == true) {
-                    //   //   return const Center(child: Loading());
-                    //   // }
-
-                    //   LoginRequestModel model = LoginRequestModel(
-                    //       email: emailController.text,
-                    //       password: passwordController.text);
-                    //   BackendInterface.login(model).then((Response) async {
-                    //     setState(() {
-                    //       isApiCallProcess = false;
-                    //     });
-                    //     //                  if (isApiCallProcess == true) {
-                    //     //   return const Center(child: Loading());
-                    //     // }
-
-                    //     if (Response.success == true) {
-                    //       await storage.write(
-                    //           key: "token", value: Response.token);
-                    //       await storage.write(
-                    //           key: "uid", value: Response.user!.uid);
-                    //       await storage.write(
-                    //           key: "id", value: Response.user!.id.toString());
-                    //       Navigator.pushAndRemoveUntil(
-                    //           context,
-                    //           MaterialPageRoute(
-                    //               builder: (context) => NavigationContainer()),
-                    //           (route) => false);
-                    //       // Navigator.pushAndRemoveUntil(
-                    //       //     context,
-                    //       //     MaterialPageRoute<void>(
-                    //       //         builder: (BuildContext context) =>
-                    //       //             Navigator()),
-                    //       //     (route) => false);
-                    //     } else {
-                    //       AlertDialog alert = AlertDialog(
-                    //         title: Text("Error"),
-                    //         content: Text("Invalid email or password."),
-                    //         actions: [
-                    //           TextButton(
-                    //             child: Text("OK"),
-                    //             onPressed: () {},
-                    //           ),
-                    //         ],
-                    //       );
-                    //     }
-                    //   });
-                    // }
                   },
                 ),
 
