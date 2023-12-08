@@ -1,14 +1,17 @@
+import 'package:coal_tracking_app/views/pages/google_map_utils/polyline_screen.dart';
+import 'package:coal_tracking_app/views/pages/homepage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class MapScreen extends StatefulWidget {
+class TripDetails extends StatefulWidget {
   @override
-  _MapScreenState createState() => _MapScreenState();
+  _TripDetailsState createState() => _TripDetailsState();
 }
 
-class _MapScreenState extends State<MapScreen> {
+class _TripDetailsState extends State<TripDetails> {
   late GoogleMapController mapController;
   double _originLatitude = 28.6332, _originLongitude = 77.4731;
   double _destLatitude = 28.6613, _destLongitude = 77.4922;
@@ -34,11 +37,21 @@ class _MapScreenState extends State<MapScreen> {
     _getPolyline();
   }
 
+  void showSnackBar(BuildContext context) {
+    final snackBar = SnackBar(
+      content: Text('Selection made'),
+      duration: Duration(milliseconds: 80),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
   @override
   Widget build(BuildContext context) {
+    var w = MediaQuery.of(context).size.width;
+    var h = MediaQuery.of(context).size.height;
     return SafeArea(
       child: Scaffold(
-          body: Stack(children: [
+          body: Stack(alignment: Alignment.bottomCenter, children: [
         GoogleMap(
           initialCameraPosition: CameraPosition(
               target: LatLng(_originLatitude, _originLongitude), zoom: 15),
@@ -53,27 +66,61 @@ class _MapScreenState extends State<MapScreen> {
           markers: Set<Marker>.of(markers.values),
           polylines: Set<Polyline>.of(polylines.values),
         ),
-        Positioned(
-            bottom: 30,
-            left: 20,
-            child: Container(
-              width: 50,
-              height: 50,
-              decoration:
-                  BoxDecoration(shape: BoxShape.circle, color: Colors.black),
-              child: Center(
-                child: IconButton(
-                  icon: Icon(
-                    Icons.navigation_outlined,
-                    color: Colors.white,
+        Container(
+          height: MediaQuery.of(context).size.height * .2,
+          width: w * 1,
+          decoration: BoxDecoration(
+              color: Colors.white, borderRadius: BorderRadius.circular(40)),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  InkWell(
+                    onTap: () {
+                      //Get.to(HomePage());
+                      showSnackBar(context);
+                    },
+                    child: Container(
+                      height: h * 0.05,
+                      width: w * 0.4,
+                      decoration: BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.all(Radius.circular(10))),
+                      child: Center(
+                        child: Text(
+                          "Decline",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
                   ),
-                  onPressed: () async {
-                    await launchUrl(Uri.parse(
-                        'google.navigation:q=28, 77&key=AIzaSyDQ2c_pOSOFYSjxGMwkFvCVWKjYOM9siow'));
-                  },
-                ),
-              ),
-            ))
+                  InkWell(
+                    onTap: () {
+                      showSnackBar(context);
+                      Get.to(MapScreen());
+                    },
+                    child: Container(
+                      height: h * 0.05,
+                      width: w * 0.4,
+                      decoration: BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.all(Radius.circular(10))),
+                      child: Center(
+                        child: Text(
+                          "Accept",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
+        )
       ])),
     );
   }
