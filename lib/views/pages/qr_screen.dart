@@ -1,5 +1,8 @@
+import 'package:coal_tracking_app/views/pages/google_map_utils/current_location.dart';
+import 'package:coal_tracking_app/views/pages/google_map_utils/polyline_screen.dart';
 import 'package:coal_tracking_app/views/pages/output.dart';
 import 'package:coal_tracking_app/views/pages/qr_overlay.dart';
+import 'package:coal_tracking_app/views/pages/trip_details.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -37,9 +40,10 @@ class _QRSCreenState extends State<QRSCreen> {
                 final Uint8List? image = capture.image;
                 for (final barcode in barcodes) {
                   debugPrint('Barcode found! ${barcode.rawValue}');
-                  Get.to(Output(
-                    riddle: barcode.rawValue,
-                  ));
+                  Get.to(TripDetails());
+                  // Get.to(Output(
+                  //   riddle: barcode.rawValue,
+                  // ));
                 }
               },
             ),
