@@ -1,20 +1,16 @@
 import 'package:coal_tracking_app/views/pages/empty.dart';
-import 'package:coal_tracking_app/views/pages/profile_folder/profile.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 // import 'package:frontend/views/pages/details_screen.dart';
 // import 'package:frontend/views/pages/expense_folder/expense_manager.dart';
 // import 'package:frontend/views/pages/explore_folder/explore.dart';
 import 'package:coal_tracking_app/views/pages/homepage.dart';
+import 'package:coal_tracking_app/views/pages/profile_folder/profile.dart';
+import 'package:flutter/material.dart';
 // import 'package:frontend/views/pages/onboarding_folder/age.dart';
 // import 'package:frontend/views/pages/onboarding_folder/details.dart';
 
 // import 'package:coal_tracking_app/views/pages/profile_folder/profile_page.dart';
 // import 'package:frontend/views/pages/expense_folder/statistics.dart';
 // import 'package:frontend/views/pages/splash_screen.dart';
-import 'package:get/get.dart';
 
 class NavigationContainer extends StatefulWidget {
   const NavigationContainer({super.key});
@@ -28,7 +24,7 @@ class _NavigationContainerState extends State<NavigationContainer> {
 
   //
 
-  List Screen = [HomePage(), Empty(), Empty(), Profile()];
+  List screen = [HomePage(), const Empty(), const Empty(), const Profile()];
 
   @override
   Widget build(BuildContext context) {
@@ -36,10 +32,10 @@ class _NavigationContainerState extends State<NavigationContainer> {
     return Scaffold(
       backgroundColor: (currentIndex == 0 || currentIndex == 1)
           ? Colors.grey.shade300
-          : Color(0xff2B3460),
-      body: Screen[currentIndex],
+          : const Color(0xff2B3460),
+      body: screen[currentIndex],
       bottomNavigationBar: Container(
-        margin: EdgeInsets.all(18),
+        margin: const EdgeInsets.all(18),
         height: size.width * .155,
         decoration: BoxDecoration(
           color: Colors.white,
@@ -47,7 +43,7 @@ class _NavigationContainerState extends State<NavigationContainer> {
             BoxShadow(
               color: Colors.black.withOpacity(.15),
               blurRadius: 30,
-              offset: Offset(0, 10),
+              offset: const Offset(0, 10),
             ),
           ],
           borderRadius: BorderRadius.circular(50),
@@ -74,7 +70,7 @@ class _NavigationContainerState extends State<NavigationContainer> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 AnimatedContainer(
-                  duration: Duration(milliseconds: 1500),
+                  duration: const Duration(milliseconds: 1500),
                   curve: Curves.fastLinearToSlowEaseIn,
                   margin: EdgeInsets.only(
                     bottom: index == currentIndex ? 0 : size.width * .029,
@@ -83,7 +79,7 @@ class _NavigationContainerState extends State<NavigationContainer> {
                   ),
                   width: size.width * .128,
                   height: index == currentIndex ? size.width * .014 : 0,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: Color(0xff2B3467),
                     borderRadius: BorderRadius.vertical(
                       bottom: Radius.circular(10),
@@ -94,7 +90,7 @@ class _NavigationContainerState extends State<NavigationContainer> {
                   listOfIcons[index],
                   size: size.width * .076,
                   color: index == currentIndex
-                      ? Color(0xff2B3460)
+                      ? const Color(0xff2B3460)
                       : Colors.black38,
                 ),
                 SizedBox(height: size.width * .03),
