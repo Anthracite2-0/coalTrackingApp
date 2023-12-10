@@ -31,14 +31,14 @@ class _CurrentLocationScreenState extends State<CurrentLocationScreen> {
   final List<Marker> _markers = <Marker>[];
 
   static const CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(28.6757, 77.5020),
+    target: LatLng(33.6844, 73.0479),
     zoom: 14,
   );
 
   List<Marker> list = const [
     Marker(
         markerId: MarkerId('1'),
-        position: LatLng(28.6757, 77.5020),
+        position: LatLng(33.6844, 73.0479),
         infoWindow: InfoWindow(title: 'some Info ')),
   ];
 
