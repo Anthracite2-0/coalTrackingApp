@@ -3,14 +3,7 @@ import 'package:coal_tracking_app/views/pages/profile_folder/profile_list_item.d
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-// import 'package:flutter/src/widgets/container.dart';
-// import 'package:flutter/src/widgets/framework.dart';
-// import 'package:flutter_screenutil/flutter_screenutil.dart';
-// import 'package:frontend/controllers/user_controller.dart';
-// import 'package:frontend/models/login_response_model.dart';
 import 'package:coal_tracking_app/utils/constants.dart';
-// import 'package:frontend/views/pages/login_folder/loginpage.dart';
-// import 'package:coal_tracking_app/views/pages/profile_folder/profile_list_item.dart';
 import 'package:coal_tracking_app/views/widgets/loading.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
