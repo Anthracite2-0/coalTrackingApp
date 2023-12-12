@@ -2,6 +2,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+const apiKey = "AIzaSyCtz4qxThjgX4v-LqdqyHsqLMpUVvGAi3E";
+
 const dark = Color(0xff2B3467);
 const background = Color(0XFFE5E5E5);
 const light = Color(0xff3E54AC);

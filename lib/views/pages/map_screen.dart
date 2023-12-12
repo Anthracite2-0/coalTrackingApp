@@ -1,35 +1,43 @@
+import 'package:coal_tracking_app/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MapScreen extends StatefulWidget {
+  final double originLatitude;
+  final double originLongitude;
+  final double destLatitude;
+  final double destLongitude;
+  const MapScreen(
+      {Key? key,
+      required this.originLatitude,
+      required this.originLongitude,
+      required this.destLatitude,
+      required this.destLongitude})
+      : super(key: key);
   @override
   _MapScreenState createState() => _MapScreenState();
 }
 
 class _MapScreenState extends State<MapScreen> {
   late GoogleMapController mapController;
-  double _originLatitude = 28.6332, _originLongitude = 77.4731;
-  double _destLatitude = 28.6613, _destLongitude = 77.4922;
-  // double _originLatitude = 26.48424, _originLongitude = 50.04551;
-  // double _destLatitude = 26.46423, _destLongitude = 50.06358;
   Map<MarkerId, Marker> markers = {};
   Map<PolylineId, Polyline> polylines = {};
   List<LatLng> polylineCoordinates = [];
   PolylinePoints polylinePoints = PolylinePoints();
-  String googleAPiKey = "AIzaSyDQ2c_pOSOFYSjxGMwkFvCVWKjYOM9siow";
+  String googleAPiKey = apiKey;
 
   @override
   void initState() {
     super.initState();
 
     /// origin marker
-    _addMarker(LatLng(_originLatitude, _originLongitude), "origin",
+    _addMarker(LatLng(widget.originLatitude, widget.originLongitude), "origin",
         BitmapDescriptor.defaultMarker);
 
     /// destination marker
-    _addMarker(LatLng(_destLatitude, _destLongitude), "destination",
+    _addMarker(LatLng(widget.destLatitude, widget.destLongitude), "destination",
         BitmapDescriptor.defaultMarkerWithHue(90));
     _getPolyline();
   }
@@ -41,7 +49,8 @@ class _MapScreenState extends State<MapScreen> {
           body: Stack(children: [
         GoogleMap(
           initialCameraPosition: CameraPosition(
-              target: LatLng(_originLatitude, _originLongitude), zoom: 15),
+              target: LatLng(widget.originLatitude, widget.originLongitude),
+              zoom: 15),
           myLocationEnabled: true,
           myLocationButtonEnabled: true,
           tiltGesturesEnabled: true,
@@ -69,7 +78,7 @@ class _MapScreenState extends State<MapScreen> {
                   ),
                   onPressed: () async {
                     await launchUrl(Uri.parse(
-                        'google.navigation:q=28, 77&key=AIzaSyDQ2c_pOSOFYSjxGMwkFvCVWKjYOM9siow'));
+                        'google.navigation:q=${widget.destLatitude}, ${widget.destLongitude}&key=AIzaSyCtz4qxThjgX4v-LqdqyHsqLMpUVvGAi3E'));
                   },
                 ),
               ),
@@ -100,8 +109,8 @@ class _MapScreenState extends State<MapScreen> {
   _getPolyline() async {
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
         googleAPiKey,
-        PointLatLng(_originLatitude, _originLongitude),
-        PointLatLng(_destLatitude, _destLongitude),
+        PointLatLng(widget.originLatitude, widget.originLongitude),
+        PointLatLng(widget.destLatitude, widget.destLongitude),
         travelMode: TravelMode.driving,
         wayPoints: [PolylineWayPoint(location: "")]);
     if (result.points.isNotEmpty) {
