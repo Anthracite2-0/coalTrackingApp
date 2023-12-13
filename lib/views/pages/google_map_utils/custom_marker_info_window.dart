@@ -23,8 +23,7 @@ class _CustomMarkerInfoWindowScreenState
   Set<Marker> _markers = {};
 
   List<String> images = [
-    'assets/images/car.png',
-    'assets/images/marker.png',
+    'assets/images/delivery-truck.png',
   ];
 
   Uint8List? markerImage;
@@ -58,65 +57,7 @@ class _CustomMarkerInfoWindowScreenState
       print('name' + images[i].toString());
       final Uint8List markerIcon =
           await getBytesFromAsset(images[i].toString(), 100);
-
-      if (i == 1) {
-        _markers.add(Marker(
-            markerId: MarkerId('2'),
-            position: LatLng(33.6992, 72.9744),
-            icon: BitmapDescriptor.fromBytes(markerIcon),
-            onTap: () {
-              _customInfoWindowController.addInfoWindow!(
-                Column(
-                  children: [
-                    Expanded(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.blue,
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.account_circle,
-                                color: Colors.white,
-                                size: 30,
-                              ),
-                              SizedBox(
-                                width: 8.0,
-                              ),
-                              Text(
-                                "I am here",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline6!
-                                    .copyWith(
-                                      color: Colors.white,
-                                    ),
-                              )
-                            ],
-                          ),
-                        ),
-                        width: double.infinity,
-                        height: double.infinity,
-                      ),
-                    ),
-                    // Triangle.isosceles(
-                    //   edge: Edge.BOTTOM,
-                    //   child: Container(
-                    //     color: Colors.blue,
-                    //     width: 20.0,
-                    //     height: 10.0,
-                    //   ),
-                    // ),
-                  ],
-                ),
-                LatLng(33.6992, 72.9744),
-              );
-            }));
-      } else {
+      if (i == 0) {
         _markers.add(Marker(
             markerId: MarkerId(i.toString()),
             position: LatLng(33.6844, 73.0479),
