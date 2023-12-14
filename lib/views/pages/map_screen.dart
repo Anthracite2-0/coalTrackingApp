@@ -110,13 +110,14 @@ class _MapScreenState extends State<MapScreen> {
 
     markers.clear();
 
-    _addTruckMarker(LatLng(position.latitude, position.longitude), "truck");
-    _addMarker(LatLng(widget.originLatitude, widget.originLongitude), "origin",
-        BitmapDescriptor.defaultMarker);
+    await _addTruckMarker(
+        LatLng(position.latitude, position.longitude), "truck");
+    await _addMarker(LatLng(widget.originLatitude, widget.originLongitude),
+        "origin", BitmapDescriptor.defaultMarker);
 
     /// destination marker
-    _addMarker(LatLng(widget.destLatitude, widget.destLongitude), "destination",
-        BitmapDescriptor.defaultMarkerWithHue(90));
+    await _addMarker(LatLng(widget.destLatitude, widget.destLongitude),
+        "destination", BitmapDescriptor.defaultMarkerWithHue(90));
     setState(() {});
   }
 
@@ -124,63 +125,64 @@ class _MapScreenState extends State<MapScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-          body: Stack(children: [
-            GoogleMap(
-              initialCameraPosition: CameraPosition(
-                  target: LatLng(widget.originLatitude, widget.originLongitude),
-                  zoom: 15),
-              myLocationEnabled: true,
-              myLocationButtonEnabled: true,
-              tiltGesturesEnabled: true,
-              mapType: MapType.hybrid,
-              compassEnabled: true,
-              scrollGesturesEnabled: true,
-              zoomGesturesEnabled: true,
-              onMapCreated: _onMapCreated,
-              markers: Set<Marker>.of(markers.values),
-              polylines: Set<Polyline>.of(polylines.values),
-              onTap: (position) {
-                _customInfoWindowController.hideInfoWindow!();
-              },
-              onCameraMove: (position) {
-                _customInfoWindowController.onCameraMove!();
-              },
-            ),
-            Positioned(
-                bottom: 30,
-                left: 20,
-                child: Container(
-                  width: 50,
-                  height: 50,
-                  decoration: const BoxDecoration(
-                      shape: BoxShape.circle, color: Colors.black),
-                  child: Center(
-                    child: IconButton(
-                      icon: const Icon(
-                        Icons.navigation_outlined,
-                        color: Colors.white,
-                      ),
-                      onPressed: () async {
-                        await launchUrl(Uri.parse(
-                            'google.navigation:q=${widget.destLatitude}, ${widget.destLongitude}&key=AIzaSyCtz4qxThjgX4v-LqdqyHsqLMpUVvGAi3E'));
-                      },
-                    ),
-                  ),
-                )),
-            CustomInfoWindow(
-              controller: _customInfoWindowController,
-              height: 200,
-              width: 300,
-              offset: 35,
-            ),
-          ]),
-          floatingActionButton: FloatingActionButton.extended(
-            onPressed: () async {
-              setState(() {});
+        body: Stack(children: [
+          GoogleMap(
+            initialCameraPosition: CameraPosition(
+                target: LatLng(widget.originLatitude, widget.originLongitude),
+                zoom: 15),
+            myLocationEnabled: true,
+            myLocationButtonEnabled: true,
+            tiltGesturesEnabled: true,
+            mapType: MapType.hybrid,
+            compassEnabled: true,
+            scrollGesturesEnabled: true,
+            zoomGesturesEnabled: true,
+            onMapCreated: _onMapCreated,
+            markers: Set<Marker>.of(markers.values),
+            polylines: Set<Polyline>.of(polylines.values),
+            onTap: (position) {
+              _customInfoWindowController.hideInfoWindow!();
             },
-            label: const Text("Current Location"),
-            icon: const Icon(Icons.location_history),
-          )),
+            onCameraMove: (position) {
+              _customInfoWindowController.onCameraMove!();
+            },
+          ),
+          Positioned(
+              bottom: 30,
+              left: 20,
+              child: Container(
+                width: 50,
+                height: 50,
+                decoration: const BoxDecoration(
+                    shape: BoxShape.circle, color: Colors.black),
+                child: Center(
+                  child: IconButton(
+                    icon: const Icon(
+                      Icons.navigation_outlined,
+                      color: Colors.white,
+                    ),
+                    onPressed: () async {
+                      await launchUrl(Uri.parse(
+                          'google.navigation:q=${widget.destLatitude}, ${widget.destLongitude}&key=AIzaSyCtz4qxThjgX4v-LqdqyHsqLMpUVvGAi3E'));
+                    },
+                  ),
+                ),
+              )),
+          CustomInfoWindow(
+            controller: _customInfoWindowController,
+            height: 200,
+            width: 300,
+            offset: 35,
+          ),
+        ]),
+        // floatingActionButton: FloatingActionButton.extended(
+        //   onPressed: () async {
+        //     setState(() {});
+        //   },
+        //   label: const Text("Current Location"),
+        //   icon: const Icon(Icons.location_history),
+        // )
+      ),
     );
   }
 

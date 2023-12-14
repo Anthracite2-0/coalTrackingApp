@@ -111,7 +111,7 @@ class _TripDetailsState extends State<TripDetails> {
                   InkWell(
                     onTap: () {
                       //showSnackBar(context);
-                      Get.to(MapScreen(
+                      Get.off(MapScreen(
                           originLatitude: widget.originLatitude,
                           originLongitude: widget.originLongitude,
                           destLatitude: widget.destLatitude,

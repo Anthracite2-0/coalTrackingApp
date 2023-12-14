@@ -72,7 +72,7 @@ class _QRSCreenState extends State<QRSCreen> {
                   _isLoading = true;
                 });
                 final List<Barcode> barcodes = capture.barcodes;
-                final Uint8List? image = capture.image;
+                //final Uint8List? image = capture.image;
                 for (final barcode in barcodes) {
                   if (barcode.rawValue!.contains('geo:')) {
                     Map<String, double> geoData =
@@ -82,7 +82,7 @@ class _QRSCreenState extends State<QRSCreen> {
                     setState(() {
                       _isLoading = false;
                     });
-                    Get.to(
+                    Get.off(
                       TripDetails(
                         originLatitude: position.latitude!,
                         originLongitude: position.longitude!,
