@@ -1,9 +1,8 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class CurrentLocationScreen extends StatefulWidget {
   const CurrentLocationScreen({Key? key}) : super(key: key);
@@ -13,147 +12,78 @@ class CurrentLocationScreen extends StatefulWidget {
 }
 
 class _CurrentLocationScreenState extends State<CurrentLocationScreen> {
-  String address = '';
-  final Completer<GoogleMapController> _controller = Completer();
+  late GoogleMapController googleMapController;
 
-  Future<Position> _getUserCurrentLocation() async {
-    await Geolocator.requestPermission()
-        .then((value) {})
-        .onError((error, stackTrace) {
-      print(error.toString());
-    });
+  static const CameraPosition initialCameraPosition = CameraPosition(
+      target: LatLng(37.42796133580664, -122.085749655962), zoom: 14);
 
-    return await Geolocator.getCurrentPosition();
-  }
-
-  final List<Marker> _markers = <Marker>[];
-
-  static const CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(28.6757, 77.5020),
-    zoom: 14,
-  );
-
-  List<Marker> list = const [
-    Marker(
-        markerId: MarkerId('1'),
-        position: LatLng(28.6757, 77.5020),
-        infoWindow: InfoWindow(title: 'some Info ')),
-  ];
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _markers.addAll(list);
-    //loadData();
-  }
-
-  loadData() {
-    _getUserCurrentLocation().then((value) async {
-      _markers.add(Marker(
-          markerId: const MarkerId('SomeId'),
-          position: LatLng(value.latitude, value.longitude),
-          infoWindow: InfoWindow(title: address)));
-
-      final GoogleMapController controller = await _controller.future;
-      CameraPosition _kGooglePlex = CameraPosition(
-        target: LatLng(value.latitude, value.longitude),
-        zoom: 14,
-      );
-      controller.animateCamera(CameraUpdate.newCameraPosition(_kGooglePlex));
-      setState(() {});
-    });
-  }
+  Set<Marker> markers = {};
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: const Text("User current location"),
         centerTitle: true,
-        backgroundColor: Colors.deepOrange,
-        title: Text('Flutter Google Map'),
       ),
-      body: SafeArea(
-        child: Stack(
-          alignment: Alignment.bottomCenter,
-          children: [
-            GoogleMap(
-              initialCameraPosition: _kGooglePlex,
-              mapType: MapType.normal,
-              myLocationButtonEnabled: true,
-              myLocationEnabled: true,
-              markers: Set<Marker>.of(_markers),
-              onMapCreated: (GoogleMapController controller) {
-                _controller.complete(controller);
-              },
-            ),
-            Container(
-              height: MediaQuery.of(context).size.height * .2,
-              decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(40)),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  InkWell(
-                    onTap: () {
-                      _getUserCurrentLocation().then((value) async {
-                        _markers.add(Marker(
-                            markerId: const MarkerId('SomeId'),
-                            position: LatLng(value.latitude, value.longitude),
-                            infoWindow: InfoWindow(title: address)));
-                        final GoogleMapController controller =
-                            await _controller.future;
+      body: GoogleMap(
+        initialCameraPosition: initialCameraPosition,
+        markers: markers,
+        zoomControlsEnabled: false,
+        mapType: MapType.normal,
+        onMapCreated: (GoogleMapController controller) {
+          googleMapController = controller;
+        },
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () async {
+          Position position = await _determinePosition();
 
-                        CameraPosition _kGooglePlex = CameraPosition(
-                          target: LatLng(value.latitude, value.longitude),
-                          zoom: 14,
-                        );
-                        controller.animateCamera(
-                            CameraUpdate.newCameraPosition(_kGooglePlex));
+          googleMapController.animateCamera(CameraUpdate.newCameraPosition(
+              CameraPosition(
+                  target: LatLng(position.latitude, position.longitude),
+                  zoom: 14)));
 
-                        List<Placemark> placemarks =
-                            await placemarkFromCoordinates(
-                                value.latitude, value.longitude);
+          markers.clear();
 
-                        final add = placemarks.first;
-                        address = add.locality.toString() +
-                            " " +
-                            add.administrativeArea.toString() +
-                            " " +
-                            add.subAdministrativeArea.toString() +
-                            " " +
-                            add.country.toString();
+          markers.add(Marker(
+              markerId: const MarkerId('currentLocation'),
+              position: LatLng(position.latitude, position.longitude)));
 
-                        setState(() {});
-                      });
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10, horizontal: 20),
-                      child: Container(
-                        height: 40,
-                        decoration: BoxDecoration(
-                            color: Colors.deepOrange,
-                            borderRadius: BorderRadius.circular(8)),
-                        child: Center(
-                            child: Text(
-                          'Current Location',
-                          style: TextStyle(color: Colors.white),
-                        )),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Text(address),
-                  )
-                ],
-              ),
-            )
-          ],
-        ),
+          setState(() {});
+        },
+        label: const Text("Current Location"),
+        icon: const Icon(Icons.location_history),
       ),
     );
+  }
+
+  Future<Position> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+
+    if (!serviceEnabled) {
+      return Future.error('Location services are disabled');
+    }
+
+    permission = await Geolocator.checkPermission();
+
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+
+      if (permission == LocationPermission.denied) {
+        return Future.error("Location permission denied");
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error('Location permissions are permanently denied');
+    }
+
+    Position position = await Geolocator.getCurrentPosition();
+
+    return position;
   }
 }

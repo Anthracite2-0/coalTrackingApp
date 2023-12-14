@@ -11,10 +11,7 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.2
-  google_maps_flutter: ^2.1.1
   custom_info_window: ^1.0.1
-  geolocator: ^8.0.5
-  flutter_geocoder: ^0.2.2-nullsafety
   geocoding: ^2.0.4
   flutter_polyline_points: ^2.0.0
 
@@ -39,7 +36,9 @@ dependencies:
   mobile_scanner: ^3.5.5
   cloud_firestore: ^4.13.4
   location: ^5.0.3
-  permission_handler: ^11.0.1
+  geolocator: ^10.1.0
+  google_maps_flutter: ^2.5.0
+  permission_handler: ^11.0.0
 
 
 dev_dependencies:

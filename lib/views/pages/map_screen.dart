@@ -1,0 +1,245 @@
+import 'dart:typed_data';
+import 'dart:ui' as ui;
+import 'package:coal_tracking_app/utils/constants.dart';
+import 'package:custom_info_window/custom_info_window.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+class MapScreen extends StatefulWidget {
+  final double originLatitude;
+  final double originLongitude;
+  final double destLatitude;
+  final double destLongitude;
+  const MapScreen(
+      {Key? key,
+      required this.originLatitude,
+      required this.originLongitude,
+      required this.destLatitude,
+      required this.destLongitude})
+      : super(key: key);
+  @override
+  _MapScreenState createState() => _MapScreenState();
+}
+
+class _MapScreenState extends State<MapScreen> {
+  late GoogleMapController mapController;
+  CustomInfoWindowController _customInfoWindowController =
+      CustomInfoWindowController();
+  Map<MarkerId, Marker> markers = {};
+  Map<PolylineId, Polyline> polylines = {};
+  List<LatLng> polylineCoordinates = [];
+  PolylinePoints polylinePoints = PolylinePoints();
+  String googleAPiKey = apiKey;
+
+  List<String> images = [
+    'assets/images/delivery-truck.png',
+  ];
+
+  Uint8List? markerImage;
+
+  Future<Uint8List> getBytesFromAsset(String path, int width) async {
+    ByteData data = await rootBundle.load(path);
+    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
+        targetWidth: width);
+    ui.FrameInfo fi = await codec.getNextFrame();
+    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
+        .buffer
+        .asUint8List();
+  }
+
+  @override
+  void dispose() {
+    _customInfoWindowController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    /// truck marker
+    _addTruckMarker(const LatLng(28.6350062, 77.4480883), "truck");
+
+    /// origin marker
+    _addMarker(LatLng(widget.originLatitude, widget.originLongitude), "origin",
+        BitmapDescriptor.defaultMarker);
+
+    /// destination marker
+    _addMarker(LatLng(widget.destLatitude, widget.destLongitude), "destination",
+        BitmapDescriptor.defaultMarkerWithHue(90));
+
+    _getPolyline();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Scaffold(
+          body: Stack(children: [
+        GoogleMap(
+          initialCameraPosition: CameraPosition(
+              target: LatLng(widget.originLatitude, widget.originLongitude),
+              zoom: 15),
+          myLocationEnabled: true,
+          myLocationButtonEnabled: true,
+          tiltGesturesEnabled: true,
+          mapType: MapType.hybrid,
+          compassEnabled: true,
+          scrollGesturesEnabled: true,
+          zoomGesturesEnabled: true,
+          onMapCreated: _onMapCreated,
+          markers: Set<Marker>.of(markers.values),
+          polylines: Set<Polyline>.of(polylines.values),
+          onTap: (position) {
+            _customInfoWindowController.hideInfoWindow!();
+          },
+          onCameraMove: (position) {
+            _customInfoWindowController.onCameraMove!();
+          },
+        ),
+        Positioned(
+            bottom: 30,
+            left: 20,
+            child: Container(
+              width: 50,
+              height: 50,
+              decoration: const BoxDecoration(
+                  shape: BoxShape.circle, color: Colors.black),
+              child: Center(
+                child: IconButton(
+                  icon: const Icon(
+                    Icons.navigation_outlined,
+                    color: Colors.white,
+                  ),
+                  onPressed: () async {
+                    await launchUrl(Uri.parse(
+                        'google.navigation:q=${widget.destLatitude}, ${widget.destLongitude}&key=AIzaSyCtz4qxThjgX4v-LqdqyHsqLMpUVvGAi3E'));
+                  },
+                ),
+              ),
+            )),
+        CustomInfoWindow(
+          controller: _customInfoWindowController,
+          height: 200,
+          width: 300,
+          offset: 35,
+        ),
+      ])),
+    );
+  }
+
+  void _onMapCreated(GoogleMapController controller) async {
+    mapController = controller;
+    _customInfoWindowController.googleMapController = controller;
+  }
+
+  _addMarker(LatLng position, String id, BitmapDescriptor descriptor) {
+    MarkerId markerId = MarkerId(id);
+    Marker marker =
+        Marker(markerId: markerId, icon: descriptor, position: position);
+    markers[markerId] = marker;
+  }
+
+  _addTruckMarker(LatLng position, String id) async {
+    MarkerId markerId = MarkerId(id);
+    final Uint8List markerIcon =
+        await getBytesFromAsset(images[0].toString(), 100);
+
+    BitmapDescriptor descriptor = BitmapDescriptor.fromBytes(markerIcon);
+    Marker marker = Marker(
+      markerId: markerId,
+      icon: descriptor,
+      position: position,
+      onTap: () {
+        _customInfoWindowController.addInfoWindow!(
+          Container(
+            width: 300,
+            height: 200,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(color: Colors.grey),
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: 300,
+                  height: 100,
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                        image: NetworkImage(
+                            'https://images.pexels.com/photos/1566837/pexels-photo-1566837.jpeg?cs=srgb&dl=pexels-narda-yescas-1566837.jpg&fm=jpg'),
+                        fit: BoxFit.fitWidth,
+                        filterQuality: FilterQuality.high),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10.0),
+                    ),
+                    color: Colors.red,
+                  ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(top: 10, left: 10, right: 10),
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 100,
+                        child: Text(
+                          'Beef Tacos',
+                          maxLines: 1,
+                          overflow: TextOverflow.fade,
+                          softWrap: false,
+                        ),
+                      ),
+                      Spacer(),
+                      Text(
+                        '.3 mi.',
+                        // widget.data!.date!,
+                      )
+                    ],
+                  ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(top: 10, left: 10, right: 10),
+                  child: Text(
+                    'Help me finish these tacos! I got a platter from Costco and it’s too much.',
+                    maxLines: 2,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const LatLng(28.6350062, 77.4480883),
+        );
+      },
+    );
+    markers[markerId] = marker;
+  }
+
+  _addPolyLine() {
+    PolylineId id = const PolylineId("poly");
+    Polyline polyline = Polyline(
+        polylineId: id, color: Colors.red, points: polylineCoordinates);
+    polylines[id] = polyline;
+    setState(() {});
+  }
+
+  _getPolyline() async {
+    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+        googleAPiKey,
+        PointLatLng(widget.originLatitude, widget.originLongitude),
+        PointLatLng(widget.destLatitude, widget.destLongitude),
+        travelMode: TravelMode.driving,
+        wayPoints: [PolylineWayPoint(location: "")]);
+    if (result.points.isNotEmpty) {
+      result.points.forEach((PointLatLng point) {
+        polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+      });
+    }
+    _addPolyLine();
+  }
+}
