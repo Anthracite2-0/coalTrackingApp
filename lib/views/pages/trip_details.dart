@@ -92,7 +92,7 @@ class _TripDetailsState extends State<TripDetails> {
                   InkWell(
                     onTap: () {
                       //Get.to(HomePage());
-                      showSnackBar(context);
+                      //showSnackBar(context);
                     },
                     child: Container(
                       height: h * 0.05,
@@ -110,8 +110,8 @@ class _TripDetailsState extends State<TripDetails> {
                   ),
                   InkWell(
                     onTap: () {
-                      showSnackBar(context);
-                      Get.to(MapScreen(
+                      //showSnackBar(context);
+                      Get.off(MapScreen(
                           originLatitude: widget.originLatitude,
                           originLongitude: widget.originLongitude,
                           destLatitude: widget.destLatitude,
