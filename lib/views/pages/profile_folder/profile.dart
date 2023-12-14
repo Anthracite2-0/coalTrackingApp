@@ -7,7 +7,6 @@ import 'package:coal_tracking_app/controllers/login_controller.dart';
 import 'package:coal_tracking_app/controllers/profile_controller.dart';
 import 'package:coal_tracking_app/utils/constants.dart';
 import 'package:coal_tracking_app/views/pages/profile_folder/profile_list_item.dart';
-import 'package:coal_tracking_app/views/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -45,15 +44,15 @@ class _ProfileState extends State<Profile> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Container(
-          width: width * 0.05,
-          color: Colors.blue,
-        ),
-        Icon(
-          LineAwesomeIcons.arrow_left,
-          size: width * 0.07,
-          color: Colors.white,
-        ),
+        // Container(
+        //   width: width * 0.05,
+        //   color: Colors.blue,
+        // ),
+        // Icon(
+        //   LineAwesomeIcons.arrow_left,
+        //   size: width * 0.07,
+        //   color: Colors.white,
+        // ),
         Expanded(child: SizedBox(width: width * 0.05)),
         // profileInfo,
         Icon(
@@ -75,7 +74,7 @@ class _ProfileState extends State<Profile> {
 
           if (userData == null) {
             if (profileController.isLoading.value == true) {
-              return const Center(child: Loading());
+              return const Center(child: CircularProgressIndicator());
             } else {
               return const Center(child: Text("No data found"));
             }
