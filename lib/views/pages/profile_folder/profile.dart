@@ -7,14 +7,8 @@ import 'package:coal_tracking_app/controllers/login_controller.dart';
 import 'package:coal_tracking_app/controllers/profile_controller.dart';
 import 'package:coal_tracking_app/utils/constants.dart';
 import 'package:coal_tracking_app/views/pages/profile_folder/profile_list_item.dart';
-import 'package:flutter/material.dart';
-import 'package:coal_tracking_app/views/pages/login_folder/login_page.dart';
-import 'package:coal_tracking_app/views/pages/profile_folder/profile_list_item.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:coal_tracking_app/utils/constants.dart';
 import 'package:coal_tracking_app/views/widgets/loading.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
@@ -81,7 +75,7 @@ class _ProfileState extends State<Profile> {
 
           if (userData == null) {
             if (profileController.isLoading.value == true) {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(child: Loading());
             } else {
               return const Center(child: Text("No data found"));
             }

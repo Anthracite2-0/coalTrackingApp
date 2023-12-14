@@ -1,8 +1,6 @@
-import 'package:coal_tracking_app/views/pages/google_map_utils/current_location.dart';
-import 'package:coal_tracking_app/views/pages/map_screen.dart';
-import 'package:coal_tracking_app/views/pages/output.dart';
 import 'package:coal_tracking_app/views/pages/qr_overlay.dart';
 import 'package:coal_tracking_app/views/pages/trip_details.dart';
+import 'package:coal_tracking_app/views/widgets/loading.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -18,7 +16,7 @@ class QRSCreen extends StatefulWidget {
 
 class _QRSCreenState extends State<QRSCreen> {
   MobileScannerController cameraController = MobileScannerController();
-
+  bool _isloading = false;
   Future<Position> _determinePosition() async {
     bool serviceEnabled;
     LocationPermission permission;
@@ -63,28 +61,40 @@ class _QRSCreenState extends State<QRSCreen> {
           ],
         ),
         body: Stack(
+          alignment: Alignment.center,
           children: [
             MobileScanner(
               controller: cameraController,
               onDetect: (capture) async {
+                setState(() {
+                  _isloading = true;
+                });
                 final List<Barcode> barcodes = capture.barcodes;
                 final Uint8List? image = capture.image;
                 for (final barcode in barcodes) {
                   debugPrint('Barcode found! ${barcode.rawValue}');
                   Position position = await _determinePosition();
-
-                  Get.to(TripDetails(
-                    originLatitude: position.latitude!,
-                    originLongitude: position.longitude!,
-                    destLatitude: 28.6613,
-                    destLongitude: 77.4922,
-                  ));
-
-                  // ));
+                  setState(() {
+                    _isloading = false;
+                  });
+                  Get.to(
+                    TripDetails(
+                      originLatitude: position.latitude!,
+                      originLongitude: position.longitude!,
+                      destLatitude: 28.6613,
+                      destLongitude: 77.4922,
+                    ),
+                  );
                 }
               },
             ),
-            QRScannerOverlay(overlayColour: Colors.black.withOpacity(0.5))
+            QRScannerOverlay(
+              overlayColour: Colors.black.withOpacity(0.5),
+            ),
+            if (_isloading)
+              const Center(
+                child: Loading(),
+              )
           ],
         ));
   }

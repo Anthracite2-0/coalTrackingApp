@@ -8,9 +8,10 @@ class Loading extends StatelessWidget {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Container(
+      height: 150,
+      width: 150,
       alignment: Alignment.center,
-      child: Lottie.asset('images/loading.json',
-          width: 100, height: 100, fit: BoxFit.cover),
+      child: Lottie.asset('assets/images/loading.json', fit: BoxFit.cover),
     );
   }
 }
