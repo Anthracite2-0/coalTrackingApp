@@ -5,6 +5,7 @@ import 'package:custom_info_window/custom_info_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -50,6 +51,35 @@ class _MapScreenState extends State<MapScreen> {
         .asUint8List();
   }
 
+  Future<Position> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+
+    if (!serviceEnabled) {
+      return Future.error('Location services are disabled');
+    }
+
+    permission = await Geolocator.checkPermission();
+
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+
+      if (permission == LocationPermission.denied) {
+        return Future.error("Location permission denied");
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error('Location permissions are permanently denied');
+    }
+
+    Position position = await Geolocator.getCurrentPosition();
+
+    return position;
+  }
+
   @override
   void dispose() {
     _customInfoWindowController.dispose();
@@ -60,9 +90,6 @@ class _MapScreenState extends State<MapScreen> {
   void initState() {
     super.initState();
 
-    /// truck marker
-    _addTruckMarker(const LatLng(28.6350062, 77.4480883), "truck");
-
     /// origin marker
     _addMarker(LatLng(widget.originLatitude, widget.originLongitude), "origin",
         BitmapDescriptor.defaultMarker);
@@ -72,62 +99,89 @@ class _MapScreenState extends State<MapScreen> {
         BitmapDescriptor.defaultMarkerWithHue(90));
 
     _getPolyline();
+    _loadData();
+  }
+
+  Future<void> _loadData() async {
+    Position position = await _determinePosition();
+
+    mapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+        target: LatLng(position.latitude, position.longitude), zoom: 14)));
+
+    markers.clear();
+
+    _addTruckMarker(LatLng(position.latitude, position.longitude), "truck");
+    _addMarker(LatLng(widget.originLatitude, widget.originLongitude), "origin",
+        BitmapDescriptor.defaultMarker);
+
+    /// destination marker
+    _addMarker(LatLng(widget.destLatitude, widget.destLongitude), "destination",
+        BitmapDescriptor.defaultMarkerWithHue(90));
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-          body: Stack(children: [
-        GoogleMap(
-          initialCameraPosition: CameraPosition(
-              target: LatLng(widget.originLatitude, widget.originLongitude),
-              zoom: 15),
-          myLocationEnabled: true,
-          myLocationButtonEnabled: true,
-          tiltGesturesEnabled: true,
-          mapType: MapType.hybrid,
-          compassEnabled: true,
-          scrollGesturesEnabled: true,
-          zoomGesturesEnabled: true,
-          onMapCreated: _onMapCreated,
-          markers: Set<Marker>.of(markers.values),
-          polylines: Set<Polyline>.of(polylines.values),
-          onTap: (position) {
-            _customInfoWindowController.hideInfoWindow!();
-          },
-          onCameraMove: (position) {
-            _customInfoWindowController.onCameraMove!();
-          },
-        ),
-        Positioned(
-            bottom: 30,
-            left: 20,
-            child: Container(
-              width: 50,
-              height: 50,
-              decoration: const BoxDecoration(
-                  shape: BoxShape.circle, color: Colors.black),
-              child: Center(
-                child: IconButton(
-                  icon: const Icon(
-                    Icons.navigation_outlined,
-                    color: Colors.white,
+        body: Stack(children: [
+          GoogleMap(
+            initialCameraPosition: CameraPosition(
+                target: LatLng(widget.originLatitude, widget.originLongitude),
+                zoom: 15),
+            myLocationEnabled: true,
+            myLocationButtonEnabled: true,
+            tiltGesturesEnabled: true,
+            mapType: MapType.hybrid,
+            compassEnabled: true,
+            scrollGesturesEnabled: true,
+            zoomGesturesEnabled: true,
+            onMapCreated: _onMapCreated,
+            markers: Set<Marker>.of(markers.values),
+            polylines: Set<Polyline>.of(polylines.values),
+            onTap: (position) {
+              _customInfoWindowController.hideInfoWindow!();
+            },
+            onCameraMove: (position) {
+              _customInfoWindowController.onCameraMove!();
+            },
+          ),
+          Positioned(
+              bottom: 30,
+              left: 20,
+              child: Container(
+                width: 50,
+                height: 50,
+                decoration: const BoxDecoration(
+                    shape: BoxShape.circle, color: Colors.black),
+                child: Center(
+                  child: IconButton(
+                    icon: const Icon(
+                      Icons.navigation_outlined,
+                      color: Colors.white,
+                    ),
+                    onPressed: () async {
+                      await launchUrl(Uri.parse(
+                          'google.navigation:q=${widget.destLatitude}, ${widget.destLongitude}&key=AIzaSyCtz4qxThjgX4v-LqdqyHsqLMpUVvGAi3E'));
+                    },
                   ),
-                  onPressed: () async {
-                    await launchUrl(Uri.parse(
-                        'google.navigation:q=${widget.destLatitude}, ${widget.destLongitude}&key=AIzaSyCtz4qxThjgX4v-LqdqyHsqLMpUVvGAi3E'));
-                  },
                 ),
-              ),
-            )),
-        CustomInfoWindow(
-          controller: _customInfoWindowController,
-          height: 200,
-          width: 300,
-          offset: 35,
-        ),
-      ])),
+              )),
+          CustomInfoWindow(
+            controller: _customInfoWindowController,
+            height: 200,
+            width: 300,
+            offset: 35,
+          ),
+        ]),
+        // floatingActionButton: FloatingActionButton.extended(
+        //   onPressed: () async {
+        //     setState(() {});
+        //   },
+        //   label: const Text("Current Location"),
+        //   icon: const Icon(Icons.location_history),
+        // )
+      ),
     );
   }
 
@@ -149,6 +203,7 @@ class _MapScreenState extends State<MapScreen> {
         await getBytesFromAsset(images[0].toString(), 100);
 
     BitmapDescriptor descriptor = BitmapDescriptor.fromBytes(markerIcon);
+
     Marker marker = Marker(
       markerId: markerId,
       icon: descriptor,
@@ -213,7 +268,7 @@ class _MapScreenState extends State<MapScreen> {
               ],
             ),
           ),
-          const LatLng(28.6350062, 77.4480883),
+          LatLng(28.6542996, 77.4908477),
         );
       },
     );
