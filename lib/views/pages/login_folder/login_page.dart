@@ -1,29 +1,19 @@
-import 'dart:convert';
-
-// import 'package:coal_tracking_app/current_location.dart';
-import 'package:coal_tracking_app/views/navigation_container.dart';
-import 'package:coal_tracking_app/views/pages/homepage.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:coal_tracking_app/interface/backend_interface.dart';
 // import 'package:frontend/models/login_request_model.dart';
 // import 'package:frontend/models/login_response_model.dart';
 // import 'package:frontend/navigation_container.dart';
+import 'package:coal_tracking_app/controllers/login_controller.dart';
 import 'package:coal_tracking_app/utils/constants.dart';
-// import 'package:frontend/views/pages/homepage.dart';
-// import 'package:frontend/views/pages/onboarding_folder/register.dart';
-// import 'package:frontend/views/pages/onboarding_folder/welcome.dart';
-
-import 'package:coal_tracking_app/views/widgets/loading.dart';
-
+// import 'package:coal_tracking_app/current_location.dart';
+import 'package:coal_tracking_app/views/navigation_container.dart';
 import 'package:coal_tracking_app/views/widgets/my_button.dart';
 import 'package:coal_tracking_app/views/widgets/my_textfield.dart';
 import 'package:coal_tracking_app/views/widgets/square_tile.dart';
-import 'package:get/get.dart' hide Response;
-import 'package:http/http.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class LoginPage extends StatefulWidget {
-  LoginPage({super.key});
+  const LoginPage({super.key});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -33,16 +23,12 @@ class _LoginPageState extends State<LoginPage> {
   bool isApiCallProcess = false;
   // text editing controllers
   final emailController = TextEditingController();
-
   final passwordController = TextEditingController();
-
   String email = "";
   String password = "";
-
-  final storage = new FlutterSecureStorage();
+  final AuthController authController = Get.find();
 
   // sign user in method
-
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -57,7 +43,6 @@ class _LoginPageState extends State<LoginPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const SizedBox(height: 50),
-
                 // logo
                 const Icon(
                   Icons.lock,
@@ -73,29 +58,24 @@ class _LoginPageState extends State<LoginPage> {
                   style: TextStyle(
                     color: Colors.grey[700],
                     fontSize: width * 0.04,
+                    fontFamily: GoogleFonts.poppins().fontFamily,
                   ),
                 ),
-
                 const SizedBox(height: 25),
-
-                // username textfield
+                // username textField
                 MyTextField(
                   controller: emailController,
                   hintText: 'Username',
                   obscureText: false,
                 ),
-
                 const SizedBox(height: 10),
-
-                // password textfield
+                // password textField
                 MyTextField(
                   controller: passwordController,
                   hintText: 'Password',
                   obscureText: true,
                 ),
-
                 const SizedBox(height: 10),
-
                 // forgot password?
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
@@ -104,31 +84,35 @@ class _LoginPageState extends State<LoginPage> {
                     children: [
                       Text(
                         'Forgot Password?',
-                        style: TextStyle(color: Colors.grey[600]),
+                        style: TextStyle(
+                          color: Colors.grey[600],
+                          fontFamily: GoogleFonts.poppins().fontFamily,
+                        ),
                       ),
                     ],
                   ),
                 ),
-
                 const SizedBox(height: 25),
-
                 // sign in button
                 MyButton(
                   h: height * 0.065,
                   w: width * 0.9,
                   text: "Sign in",
-                  onTap: () {
+                  onTap: () async {
+                    authController.login(
+                        emailController.text, passwordController.text);
+
                     Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute<void>(
-                            builder: (BuildContext context) =>
-                                NavigationContainer()),
-                        (route) => false);
+                      context,
+                      MaterialPageRoute<void>(
+                        builder: (BuildContext context) =>
+                            const NavigationContainer(),
+                      ),
+                      (route) => false,
+                    );
                   },
                 ),
-
                 const SizedBox(height: 50),
-
                 // or continue with
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
@@ -141,10 +125,15 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10.0,
+                        ),
                         child: Text(
                           'Or continue with',
-                          style: TextStyle(color: Colors.grey[700]),
+                          style: TextStyle(
+                            color: Colors.grey[700],
+                            fontFamily: GoogleFonts.poppins().fontFamily,
+                          ),
                         ),
                       ),
                       Expanded(
@@ -156,52 +145,58 @@ class _LoginPageState extends State<LoginPage> {
                     ],
                   ),
                 ),
-
                 const SizedBox(height: 50),
-
                 // google + apple sign in buttons
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    // google button
-                    SquareTile(imagePath: 'assets/images/google.png'),
-
-                    SizedBox(width: 25),
-
-                    // apple button
-                    SquareTile(imagePath: 'assets/images/apple.png')
-                  ],
-                ),
-
-                const SizedBox(height: 50),
-
-                // not a member? register now
-                Row(
+                const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      'Not a member?',
-                      style: TextStyle(color: Colors.grey[700]),
+                    // google button
+                    SquareTile(
+                      imagePath: 'assets/images/google.png',
                     ),
-                    const SizedBox(width: 4),
-                    InkWell(
-                      onTap: () {
-                        //Get.to(Welcome());
-                      },
-                      child: Text(
-                        'Register now',
-                        style: TextStyle(
-                          color: dark,
-                          fontWeight: FontWeight.bold,
-                          decoration: TextDecoration.underline,
-                        ),
-                      ),
-                    ),
+                    SizedBox(width: 25),
+                    // apple button
+                    SquareTile(
+                      imagePath: 'assets/images/apple.png',
+                    )
                   ],
                 ),
-                SizedBox(
-                  height: width * 0.04,
-                )
+                const SizedBox(
+                  height: 50,
+                ),
+                // not a member? register now
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: [
+                //     Text(
+                //       'Not a member?',
+                //       style: TextStyle(
+                //         color: Colors.grey[700],
+                //         fontFamily: GoogleFonts.poppins().fontFamily,
+                //       ),
+                //     ),
+                //     const SizedBox(
+                //       width: 4,
+                //     ),
+                //     InkWell(
+                //       onTap: () {
+                //         //Get.to(Welcome());
+                //       },
+                //       child: Text(
+                //         'Register now',
+                //         style: TextStyle(
+                //           color: dark,
+                //           fontWeight: FontWeight.bold,
+                //           decoration: TextDecoration.underline,
+                //           fontFamily: GoogleFonts.poppins().fontFamily,
+                //         ),
+                //       ),
+                //     ),
+                //   ],
+                // ),
+                // SizedBox(
+                //   height: width * 0.04,
+                // )
               ],
             ),
           ),
@@ -213,9 +208,7 @@ class _LoginPageState extends State<LoginPage> {
   bool validateAndSave() {
     email = emailController.text;
     password = passwordController.text;
-
     if (email.isEmpty || password.isEmpty) {
-      print("fuck");
       return false;
     }
     return true;

@@ -1,16 +1,10 @@
-import 'dart:io';
+import 'dart:async';
+import 'dart:ui' as ui;
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'dart:async';
-import 'dart:convert';
-import 'dart:typed_data';
-import 'dart:typed_data';
-import 'dart:ui';
-import 'dart:ui' as ui;
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:http/http.dart' as http;
 
 class CustomMarkerWithNetworkImage extends StatefulWidget {
   const CustomMarkerWithNetworkImage({Key? key}) : super(key: key);

@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:uuid/uuid.dart';
 import 'package:http/http.dart' as http;
+import 'package:uuid/uuid.dart';
 
 class GoogleSearchPlacesApi extends StatefulWidget {
   @override
@@ -10,8 +10,8 @@ class GoogleSearchPlacesApi extends StatefulWidget {
 }
 
 class _GoogleSearchPlacesApiState extends State<GoogleSearchPlacesApi> {
-  var _controller = TextEditingController();
-  var uuid = new Uuid();
+  final _controller = TextEditingController();
+  var uuid = Uuid();
   String _sessionToken = '1234567890';
   List<dynamic> _placeList = [];
 
@@ -62,7 +62,7 @@ class _GoogleSearchPlacesApiState extends State<GoogleSearchPlacesApi> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: Text(
+        title: const Text(
           'Google Map Search places Api',
         ),
       ),
@@ -77,9 +77,9 @@ class _GoogleSearchPlacesApiState extends State<GoogleSearchPlacesApi> {
                 hintText: "Seek your location here",
                 focusColor: Colors.white,
                 floatingLabelBehavior: FloatingLabelBehavior.never,
-                prefixIcon: Icon(Icons.map),
+                prefixIcon: const Icon(Icons.map),
                 suffixIcon: IconButton(
-                  icon: Icon(Icons.cancel),
+                  icon: const Icon(Icons.cancel),
                   onPressed: () {
                     _controller.clear();
                   },
@@ -89,7 +89,7 @@ class _GoogleSearchPlacesApiState extends State<GoogleSearchPlacesApi> {
           ),
           Expanded(
             child: ListView.builder(
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               itemCount: _placeList.length,
               itemBuilder: (context, index) {

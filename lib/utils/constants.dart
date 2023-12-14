@@ -1,6 +1,4 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 const apiKey = "AIzaSyCtz4qxThjgX4v-LqdqyHsqLMpUVvGAi3E";
 
