@@ -90,19 +90,20 @@ class _MapScreenState extends State<MapScreen> {
   void initState() {
     super.initState();
 
-    /// origin marker
-    _addMarker(LatLng(widget.originLatitude, widget.originLongitude), "origin",
-        BitmapDescriptor.defaultMarker);
-
-    /// destination marker
-    _addMarker(LatLng(widget.destLatitude, widget.destLongitude), "destination",
-        BitmapDescriptor.defaultMarkerWithHue(90));
-
-    _getPolyline();
     _loadData();
   }
 
   Future<void> _loadData() async {
+    /// origin marker
+    await _addMarker(LatLng(widget.originLatitude, widget.originLongitude),
+        "origin", BitmapDescriptor.defaultMarker);
+
+    /// destination marker
+    await _addMarker(LatLng(widget.destLatitude, widget.destLongitude),
+        "destination", BitmapDescriptor.defaultMarkerWithHue(90));
+
+    await _getPolyline();
+
     Position position = await _determinePosition();
 
     mapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
