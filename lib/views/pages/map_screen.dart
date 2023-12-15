@@ -1,5 +1,6 @@
-import 'dart:typed_data';
+import 'dart:async';
 import 'dart:ui' as ui;
+
 import 'package:coal_tracking_app/utils/constants.dart';
 import 'package:custom_info_window/custom_info_window.dart';
 import 'package:flutter/material.dart';
@@ -90,25 +91,43 @@ class _MapScreenState extends State<MapScreen> {
   void initState() {
     super.initState();
 
+    /// origin marker
+    _addMarker(LatLng(widget.originLatitude, widget.originLongitude), "origin",
+        BitmapDescriptor.defaultMarker);
+
+    /// destination marker
+    _addMarker(LatLng(widget.destLatitude, widget.destLongitude), "destination",
+        BitmapDescriptor.defaultMarkerWithHue(90));
+
+    _getPolyline();
     _loadData();
   }
 
   Future<void> _loadData() async {
-    /// origin marker
+    Position position = await _determinePosition();
+
+    mapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+        target: LatLng(position.latitude, position.longitude), zoom: 14)));
+
+    markers.clear();
+
+    await _addTruckMarker(
+        LatLng(position.latitude, position.longitude), "truck");
     await _addMarker(LatLng(widget.originLatitude, widget.originLongitude),
         "origin", BitmapDescriptor.defaultMarker);
 
     /// destination marker
     await _addMarker(LatLng(widget.destLatitude, widget.destLongitude),
         "destination", BitmapDescriptor.defaultMarkerWithHue(90));
+    setState(() {});
 
-    await _getPolyline();
+    Timer.periodic(const Duration(seconds: 5), (timer) {
+      _updateData();
+    });
+  }
 
+  Future<void> _updateData() async {
     Position position = await _determinePosition();
-
-    mapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
-        target: LatLng(position.latitude, position.longitude), zoom: 14)));
-
     markers.clear();
 
     await _addTruckMarker(
