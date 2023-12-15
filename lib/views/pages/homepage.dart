@@ -190,7 +190,7 @@ class _HomePageState extends State<HomePage> {
                     height: 20,
                   ),
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(10),
                     child: ColorFiltered(
                       colorFilter: ColorFilter.mode(
                         Colors.black.withOpacity(0.4),
@@ -199,10 +199,10 @@ class _HomePageState extends State<HomePage> {
                       child: Container(
                         height: 150,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(10),
                           image: const DecorationImage(
                             fit: BoxFit.cover,
-                            image: AssetImage('assets/images/chicken.png'),
+                            image: AssetImage('assets/images/fakeMap.jpg'),
                           ),
                         ),
                         child: Container(
@@ -212,8 +212,8 @@ class _HomePageState extends State<HomePage> {
                               begin: Alignment.bottomRight,
                               stops: const [0.3, 0.9],
                               colors: [
-                                Colors.black.withOpacity(.8),
-                                Colors.black.withOpacity(.2)
+                                Colors.black.withOpacity(.7),
+                                Colors.black.withOpacity(.3)
                               ],
                             ),
                           ),
@@ -223,14 +223,14 @@ class _HomePageState extends State<HomePage> {
                               margin:
                                   const EdgeInsets.only(right: 10, bottom: 10),
                               alignment: Alignment.center,
-                              height: 50,
-                              width: 50,
+                              height: 40,
+                              width: 30,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
-                                color: Colors.black,
+                                color: Colors.transparent,
                               ),
                               child: const Icon(
-                                Icons.arrow_right_alt,
+                                Icons.arrow_forward_ios_sharp,
                                 color: Colors.white,
                                 size: 30,
                               ),
