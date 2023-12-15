@@ -100,7 +100,7 @@ class _NavigationContainerState extends State<NavigationContainer> {
                         width: size.width * .128,
                         height: index == currentIndex ? size.width * .014 : 0,
                         decoration: const BoxDecoration(
-                          color: Color(0xff2B3467),
+                          color: Color(0xff161A30),
                           borderRadius: BorderRadius.vertical(
                             bottom: Radius.circular(10),
                           ),
@@ -110,7 +110,7 @@ class _NavigationContainerState extends State<NavigationContainer> {
                         listOfIcons[index],
                         size: size.width * .076,
                         color: index == currentIndex
-                            ? const Color(0xff2B3460)
+                            ? Color(0xff161A30)
                             : Colors.black38,
                       ),
                       SizedBox(height: size.width * .03),
