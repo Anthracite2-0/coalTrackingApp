@@ -179,10 +179,10 @@ class _HomePageState extends State<HomePage> {
                     child: ListView(
                       scrollDirection: Axis.horizontal,
                       children: <Widget>[
-                        promoCard('assets/images/chicken.png'),
-                        promoCard('assets/images/chicken.png'),
-                        promoCard('assets/images/chicken.png'),
-                        promoCard('assets/images/chicken.png'),
+                        promoCard('assets/images/fakeMap.jpg', 0),
+                        promoCard('assets/images/fakeMap(2).jpg', 1),
+                        promoCard('assets/images/fakeMap(3).jpg', 2),
+                        promoCard('assets/images/fakeMap(2).jpg', 3),
                       ],
                     ),
                   ),
@@ -252,25 +252,29 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget promoCard(image) {
+  Widget promoCard(image, index) {
     return AspectRatio(
       aspectRatio: 2.62 / 3,
       child: Container(
         margin: const EdgeInsets.only(right: 15.0),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
+          border: Border.all(width: 3, color: Colors.white),
+          borderRadius: BorderRadius.circular(10),
           image: DecorationImage(fit: BoxFit.cover, image: AssetImage(image)),
         ),
         child: Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
+            //border: Border.all(width: 2, color: Colors.white),
+            borderRadius: BorderRadius.circular(10),
             gradient: LinearGradient(
               begin: Alignment.bottomRight,
               stops: const [0.1, 0.9],
-              colors: [
-                Colors.black.withOpacity(.8),
-                Colors.black.withOpacity(.1)
-              ],
+              colors: (index == 0)
+                  ? [Colors.black.withOpacity(0), Colors.black.withOpacity(0)]
+                  : [
+                      Colors.black.withOpacity(0.8),
+                      Colors.black.withOpacity(0.5)
+                    ],
             ),
           ),
         ),
