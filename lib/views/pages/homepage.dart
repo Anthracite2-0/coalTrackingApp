@@ -14,14 +14,16 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
+    var w = MediaQuery.of(context).size.width;
+    var h = MediaQuery.of(context).size.height;
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(244, 243, 243, 1),
+      backgroundColor: const Color.fromARGB(255, 235, 235, 235),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: Container(
         margin:
             EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.1),
         child: FloatingActionButton.extended(
-          backgroundColor: Colors.black,
+          backgroundColor: const Color(0xff161A30),
           onPressed: () {
             Get.to(() => const QRSCreen());
           },
@@ -30,20 +32,36 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
+        centerTitle: true,
+        //title: const Text('AppBar'),
         leading: IconButton(
+          onPressed: () {},
           icon: const Icon(
             Icons.menu,
-            color: Colors.black87,
+            color: const Color(0xff161A30),
           ),
-          onPressed: () {
-            Scaffold.of(context).openDrawer();
-          },
         ),
-        systemOverlayStyle: SystemUiOverlayStyle.dark,
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(
+              Icons.notifications,
+              color: const Color(0xff161A30),
+            ),
+          ),
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(
+              Icons.chat,
+              color: const Color(0xff161A30),
+            ),
+          ),
+        ],
+        backgroundColor: Colors.white,
+        elevation: 0,
       ),
       body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -68,12 +86,12 @@ class _HomePageState extends State<HomePage> {
                             TextSpan(
                               text: 'Hello, ',
                               style: TextStyle(
-                                fontSize: 24,
+                                fontSize: 30,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                             TextSpan(
-                              text: 'User',
+                              text: 'Suresh',
                               style: TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,
@@ -87,7 +105,7 @@ class _HomePageState extends State<HomePage> {
                         height: 16,
                       ),
                       const Text(
-                        'Current Location',
+                        'You are in Ghaziabad',
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 18,
@@ -239,12 +257,134 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                     ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Container(
+                        width: w * 0.4,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.details_rounded,
+                              color: Colors.black,
+                              size: 20,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              "SOS",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 20),
+                            )
+                          ],
+                        ),
+                      ),
+                      Container(
+                        width: w * 0.4,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.call,
+                              color: Colors.black,
+                              size: 20,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              "Call",
+                              style:
+                                  TextStyle(color: Colors.black, fontSize: 20),
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Container(
+                        width: w * 0.4,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.next_week_rounded,
+                              color: Colors.black,
+                              size: 20,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              "Pass",
+                              style:
+                                  TextStyle(color: Colors.black, fontSize: 20),
+                            )
+                          ],
+                        ),
+                      ),
+                      Container(
+                        width: w * 0.4,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.receipt_long_sharp,
+                              color: Colors.black,
+                              size: 20,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              "Logs",
+                              style:
+                                  TextStyle(color: Colors.black, fontSize: 20),
+                            )
+                          ],
+                        ),
+                      )
+                    ],
                   )
                 ],
               ),
             ),
             const SizedBox(
-              height: 120,
+              height: 20,
             ),
           ],
         ),
