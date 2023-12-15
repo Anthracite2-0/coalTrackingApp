@@ -24,7 +24,7 @@ class _NavigationContainerState extends State<NavigationContainer> {
 
   //
 
-  List screen = [HomePage(), const Empty(), const Empty(), const Profile()];
+  List screen = [const HomePage(), const Empty(), const Profile()];
 
   @override
   Widget build(BuildContext context) {
@@ -63,8 +63,12 @@ class _NavigationContainerState extends State<NavigationContainer> {
                 // ],
                 borderRadius: BorderRadius.circular(50),
               ),
-              child: ListView.builder(
-                itemCount: 4,
+              child: ListView.separated(
+                separatorBuilder: (context, index) => const SizedBox(
+                  width: 35,
+                ),
+                shrinkWrap: true,
+                itemCount: 3,
                 scrollDirection: Axis.horizontal,
                 padding: EdgeInsets.symmetric(horizontal: size.width * .024),
                 itemBuilder: (context, index) => InkWell(
@@ -123,8 +127,8 @@ class _NavigationContainerState extends State<NavigationContainer> {
 
   List<IconData> listOfIcons = [
     Icons.home_rounded,
-    Icons.compare_arrows_rounded,
-    Icons.assured_workload_outlined,
+    Icons.location_on_rounded,
+    // Icons.assured_workload_outlined,
     Icons.person_rounded,
   ];
 }
