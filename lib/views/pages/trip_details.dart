@@ -1,8 +1,12 @@
+import 'package:coal_tracking_app/interface/backend_interface.dart';
+import 'package:coal_tracking_app/models/accept_ride_model.dart';
 import 'package:coal_tracking_app/utils/constants.dart';
 import 'package:coal_tracking_app/views/pages/map_screen.dart';
 import 'package:coal_tracking_app/views/pages/homepage_folder/homepage.dart';
+import 'package:coal_tracking_app/views/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -32,6 +36,9 @@ class _TripDetailsState extends State<TripDetails> {
   PolylinePoints polylinePoints = PolylinePoints();
   //String googleAPiKey = "AIzaSyDQ2c_pOSOFYSjxGMwkFvCVWKjYOM9siow";
   String googleAPiKey = apiKey;
+  bool isApiCallProcess = false;
+
+  final storage = new FlutterSecureStorage();
 
   @override
   void initState() {
@@ -111,11 +118,43 @@ class _TripDetailsState extends State<TripDetails> {
                   InkWell(
                     onTap: () {
                       //showSnackBar(context);
-                      Get.off(MapScreen(
-                          originLatitude: widget.originLatitude,
-                          originLongitude: widget.originLongitude,
-                          destLatitude: widget.destLatitude,
-                          destLongitude: widget.destLongitude));
+                      setState(() {
+                        isApiCallProcess = true;
+                      });
+                      AcceptRideModel acceptRideModel = AcceptRideModel(
+                        mobile: "9876567898",
+                        orderId: "14",
+                      );
+                      BackendInterface.accept(acceptRideModel)
+                          .then((Response) async {
+                        if (Response.success == true) {
+                          setState(() {
+                            isApiCallProcess = false;
+                          });
+                          Get.off(MapScreen(
+                              originLatitude: widget.originLatitude,
+                              originLongitude: widget.originLongitude,
+                              destLatitude: widget.destLatitude,
+                              destLongitude: widget.destLongitude));
+                        } else {
+                          AlertDialog alert = AlertDialog(
+                            title: Text("Error"),
+                            content: Text("Error from server side"),
+                            actions: [
+                              TextButton(
+                                child: Text("OK"),
+                                onPressed: () {},
+                              ),
+                            ],
+                          );
+                        }
+                      });
+
+                      // Get.off(MapScreen(
+                      //     originLatitude: widget.originLatitude,
+                      //     originLongitude: widget.originLongitude,
+                      //     destLatitude: widget.destLatitude,
+                      //     destLongitude: widget.destLongitude));
                     },
                     child: Container(
                       height: h * 0.05,
@@ -135,7 +174,11 @@ class _TripDetailsState extends State<TripDetails> {
               )
             ],
           ),
-        )
+        ),
+        if (isApiCallProcess)
+          const Center(
+            child: Loading(),
+          )
       ])),
     );
   }
