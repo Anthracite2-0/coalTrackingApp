@@ -6,7 +6,6 @@ class Loading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Container(
       alignment: Alignment.center,
       child: Lottie.asset('assets/images/loading(2).json',

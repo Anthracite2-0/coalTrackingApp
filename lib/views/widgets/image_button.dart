@@ -1,22 +1,20 @@
 import 'package:flutter/material.dart';
 
-class imagebutton extends StatelessWidget {
-  final img_url;
-  final button_name;
+class ImageButton extends StatelessWidget {
+  final String imgUrl;
+  final String buttonName;
 
-  const imagebutton({
+  const ImageButton({
     super.key,
-    required this.img_url,
-    required this.button_name,
+    required this.imgUrl,
+    required this.buttonName,
   });
 
   @override
   Widget build(BuildContext context) {
-
     var size = MediaQuery.of(context).size;
     var height = size.height;
     var width = size.width;
-
 
     return Row(
       children: [
@@ -29,13 +27,13 @@ class imagebutton extends StatelessWidget {
           child: Column(
             children: [
               Image.asset(
-                img_url,
-                height: width*0.14,
-          width: width*0.14,
+                imgUrl,
+                height: width * 0.14,
+                width: width * 0.14,
                 fit: BoxFit.contain,
               ),
               Text(
-                button_name,
+                buttonName,
                 style: TextStyle(
                   color: Colors.black,
                 ),
@@ -43,7 +41,9 @@ class imagebutton extends StatelessWidget {
             ],
           ),
         ),
-        SizedBox(width: width*0.02,)
+        SizedBox(
+          width: width * 0.02,
+        )
       ],
     );
   }

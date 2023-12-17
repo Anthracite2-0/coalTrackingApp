@@ -6,8 +6,8 @@ import 'package:coal_tracking_app/views/pages/homepage_folder/pass.dart';
 import 'package:coal_tracking_app/views/pages/homepage_folder/sos.dart';
 import 'package:coal_tracking_app/views/pages/qr_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -102,28 +102,31 @@ class _HomePageState extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Container(
+              margin: const EdgeInsets.all(16),
               width: double.infinity,
               decoration: const BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.vertical(
-                  bottom: Radius.circular(30),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(20),
                 ),
               ),
-              padding: const EdgeInsets.all(20.0),
-              child: Row(
+              padding: const EdgeInsets.all(16.0),
+              child: Stack(
+                alignment: Alignment.bottomRight,
                 children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       RichText(
-                        text: const TextSpan(
+                        text: TextSpan(
                           style: TextStyle(color: Colors.black),
                           children: [
                             TextSpan(
                               text: 'Hello, ',
                               style: TextStyle(
-                                fontSize: 30,
-                                fontWeight: FontWeight.bold,
+                                fontSize: 24,
+                                fontWeight: FontWeight.w400,
+                                fontFamily: GoogleFonts.poppins().fontFamily,
                               ),
                             ),
                             TextSpan(
@@ -132,13 +135,14 @@ class _HomePageState extends State<HomePage> {
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.orange,
+                                fontFamily: GoogleFonts.poppins().fontFamily,
                               ),
                             ),
                           ],
                         ),
                       ),
                       const SizedBox(
-                        height: 16,
+                        height: 8,
                       ),
                       RichText(
                         text: const TextSpan(
@@ -161,7 +165,7 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                             TextSpan(
-                              text: 'and heading\ntowards Ghaziabad',
+                              text: 'and heading towards Ghaziabad',
                               style: TextStyle(
                                 fontSize: 13,
                                 fontWeight: FontWeight.bold,
@@ -180,7 +184,7 @@ class _HomePageState extends State<HomePage> {
                       //   ),
                       // ),
                       const SizedBox(
-                        height: 12,
+                        height: 16,
                       ),
                       Text(
                         "${DateTime.now().hour.isGreaterThan(12) ? DateTime.now().hour - 12 : DateTime.now().hour == 0 ? 12 : DateTime.now().hour}:${DateTime.now().minute} ${DateTime.now().hour.isGreaterThan(12) ? "PM" : "AM"}",
@@ -191,7 +195,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       const SizedBox(
-                        height: 10,
+                        height: 8,
                       ),
                       // Container(
                       //   padding: const EdgeInsets.all(5),
@@ -215,28 +219,30 @@ class _HomePageState extends State<HomePage> {
                       // ),
                     ],
                   ),
-                  const Spacer(),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    decoration: BoxDecoration(
-                      color: const Color.fromRGBO(244, 243, 243, 1),
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: TextButton(
-                      onPressed: () {
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //     builder: (context) => const CurrentLocation(),
-                        //   ),
-                        // );
-                      },
-                      child: const Text(
-                        "12 km to Ghaz.",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      decoration: BoxDecoration(
+                        color: const Color.fromRGBO(244, 243, 243, 1),
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: TextButton(
+                        onPressed: () {
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //     builder: (context) => const CurrentLocation(),
+                          //   ),
+                          // );
+                        },
+                        child: const Text(
+                          "12 km to Ghaz.",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
@@ -245,7 +251,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             const SizedBox(
-              height: 20,
+              height: 8,
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
