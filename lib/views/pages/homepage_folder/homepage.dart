@@ -30,7 +30,7 @@ class _HomePageState extends State<HomePage> {
         child: FloatingActionButton.extended(
           backgroundColor: const Color(0xff161A30),
           onPressed: () {
-            Get.to(() => const QRSCreen());
+            Get.to(() => const QRScreen());
           },
           label: const Text("Scan the QR"),
           icon: const Icon(Icons.qr_code_scanner_outlined),
@@ -49,18 +49,16 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ),
-        leading: Container(
-          child: const Row(
-            children: [
-              SizedBox(
-                width: 20,
-              ),
-              Icon(
-                Icons.location_on,
-                color: Colors.black,
-              ),
-            ],
-          ),
+        leading: const Row(
+          children: [
+            SizedBox(
+              width: 20,
+            ),
+            Icon(
+              Icons.location_on,
+              color: Colors.black,
+            ),
+          ],
         ),
         // title:  Text(
         //   'AppBar',

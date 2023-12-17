@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:coal_tracking_app/models/qr_model.dart';
 import 'package:coal_tracking_app/views/pages/qr_overlay.dart';
 import 'package:coal_tracking_app/views/pages/trip_details.dart';
@@ -10,14 +8,14 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
-class QRSCreen extends StatefulWidget {
-  const QRSCreen({Key? key}) : super(key: key);
+class QRScreen extends StatefulWidget {
+  const QRScreen({Key? key}) : super(key: key);
 
   @override
-  State<QRSCreen> createState() => _QRSCreenState();
+  State<QRScreen> createState() => _QRScreenState();
 }
 
-class _QRSCreenState extends State<QRSCreen> {
+class _QRScreenState extends State<QRScreen> {
   MobileScannerController cameraController = MobileScannerController();
   bool _isLoading = false;
   Future<Position> _determinePosition() async {
@@ -54,60 +52,63 @@ class _QRSCreenState extends State<QRSCreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          //title: const Text('QRScanner'),
-          actions: [
-            IconButton(
-                onPressed: () {
-                  cameraController.switchCamera();
-                },
-                icon: const Icon(Icons.camera_rear_outlined))
-          ],
-        ),
-        body: Stack(
-          alignment: Alignment.center,
-          children: [
-            MobileScanner(
-              controller: cameraController,
-              onDetect: (capture) async {
-                setState(() {
-                  _isLoading = true;
-                });
-                final List<Barcode> barcodes = capture.barcodes;
-                //final Uint8List? image = capture.image;
-                for (final barcode in barcodes) {
-                  print(barcode.rawValue);
-                  if (barcode.rawValue!.contains('final_destination')) {
-                    // print(barcode.rawValue);
-                    QRModel qrmodel = qrModelJson(barcode.rawValue!);
-                    // Map<String, double> geoData =
-                    //     parseGeoData(barcode.rawValue!);
-                    //debugPrint('Barcode found! ${geoData['latitude']}');
-                    Position position = await _determinePosition();
-                    setState(() {
-                      _isLoading = false;
-                    });
-                    Get.off(
-                      TripDetails(
-                        originLatitude: position.latitude!,
-                        originLongitude: position.longitude!,
-                        destLatitude: qrmodel.finalDestination!.lat!,
-                        destLongitude: qrmodel.finalDestination!.lng!,
-                      ),
-                    );
-                  }
-                }
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        //title: const Text('QRScanner'),
+        actions: [
+          IconButton(
+              onPressed: () {
+                cameraController.switchCamera();
               },
-            ),
-            QRScannerOverlay(
-              overlayColour: Colors.black.withOpacity(0.5),
-            ),
-            if (_isLoading)
-              const Center(
-                child: Loading(),
-              )
-          ],
-        ));
+              icon: const Icon(Icons.camera_rear_outlined))
+        ],
+      ),
+      body: Stack(
+        alignment: Alignment.center,
+        children: [
+          MobileScanner(
+            controller: cameraController,
+            onDetect: (capture) async {
+              setState(() {
+                _isLoading = true;
+              });
+              final List<Barcode> barcodes = capture.barcodes;
+              //final Uint8List? image = capture.image;
+              for (final barcode in barcodes) {
+                if (kDebugMode) {
+                  print(barcode.rawValue);
+                }
+                if (barcode.rawValue!.contains('final_destination')) {
+                  // print(barcode.rawValue);
+                  QRModel qrmodel = qrModelJson(barcode.rawValue!);
+                  // Map<String, double> geoData =
+                  //     parseGeoData(barcode.rawValue!);
+                  //debugPrint('Barcode found! ${geoData['latitude']}');
+                  Position position = await _determinePosition();
+                  setState(() {
+                    _isLoading = false;
+                  });
+                  Get.off(
+                    TripDetails(
+                      originLatitude: position.latitude,
+                      originLongitude: position.longitude,
+                      destLatitude: qrmodel.finalDestination!.lat!,
+                      destLongitude: qrmodel.finalDestination!.lng!,
+                    ),
+                  );
+                }
+              }
+            },
+          ),
+          QRScannerOverlay(
+            overlayColour: Colors.black.withOpacity(0.5),
+          ),
+          if (_isLoading)
+            const Center(
+              child: Loading(),
+            )
+        ],
+      ),
+    );
   }
 }
