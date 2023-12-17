@@ -1,4 +1,9 @@
 // import 'package:coal_tracking_app/current_location.dart';
+import 'package:coal_tracking_app/views/pages/homepage_folder/chat.dart';
+import 'package:coal_tracking_app/views/pages/homepage_folder/logs.dart';
+import 'package:coal_tracking_app/views/pages/homepage_folder/notifications.dart';
+import 'package:coal_tracking_app/views/pages/homepage_folder/pass.dart';
+import 'package:coal_tracking_app/views/pages/homepage_folder/sos.dart';
 import 'package:coal_tracking_app/views/pages/qr_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -38,22 +43,26 @@ class _HomePageState extends State<HomePage> {
           onPressed: () {},
           icon: const Icon(
             Icons.menu,
-            color: const Color(0xff161A30),
+            color: Color(0xff161A30),
           ),
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Get.to(Notifications());
+            },
             icon: const Icon(
               Icons.notifications,
-              color: const Color(0xff161A30),
+              color: Color(0xff161A30),
             ),
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Get.to(Chat());
+            },
             icon: const Icon(
               Icons.chat,
-              color: const Color(0xff161A30),
+              color: Color(0xff161A30),
             ),
           ),
         ],
@@ -105,7 +114,7 @@ class _HomePageState extends State<HomePage> {
                         height: 16,
                       ),
                       const Text(
-                        'You are in Ghaziabad',
+                        'You are in Bhopal',
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 18,
@@ -207,50 +216,53 @@ class _HomePageState extends State<HomePage> {
                   const SizedBox(
                     height: 20,
                   ),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: ColorFiltered(
-                      colorFilter: ColorFilter.mode(
-                        Colors.black.withOpacity(0.4),
-                        BlendMode.color,
-                      ), // Change color here
-                      child: Container(
-                        height: 150,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          image: const DecorationImage(
-                            fit: BoxFit.cover,
-                            image: AssetImage('assets/images/fakeMap.jpg'),
-                          ),
-                        ),
+                  InkWell(
+                    onTap: () {},
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: ColorFiltered(
+                        colorFilter: ColorFilter.mode(
+                          Colors.black.withOpacity(0.4),
+                          BlendMode.color,
+                        ), // Change color here
                         child: Container(
+                          height: 150,
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            gradient: LinearGradient(
-                              begin: Alignment.bottomRight,
-                              stops: const [0.3, 0.9],
-                              colors: [
-                                Colors.black.withOpacity(.7),
-                                Colors.black.withOpacity(.3)
-                              ],
+                            borderRadius: BorderRadius.circular(10),
+                            image: const DecorationImage(
+                              fit: BoxFit.cover,
+                              image: AssetImage('assets/images/fakeMap.jpg'),
                             ),
                           ),
-                          child: Align(
-                            alignment: Alignment.bottomRight,
-                            child: Container(
-                              margin:
-                                  const EdgeInsets.only(right: 10, bottom: 10),
-                              alignment: Alignment.center,
-                              height: 40,
-                              width: 30,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                color: Colors.transparent,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              gradient: LinearGradient(
+                                begin: Alignment.bottomRight,
+                                stops: const [0.3, 0.9],
+                                colors: [
+                                  Colors.black.withOpacity(.7),
+                                  Colors.black.withOpacity(.3)
+                                ],
                               ),
-                              child: const Icon(
-                                Icons.arrow_forward_ios_sharp,
-                                color: Colors.white,
-                                size: 30,
+                            ),
+                            child: Align(
+                              alignment: Alignment.bottomRight,
+                              child: Container(
+                                margin: const EdgeInsets.only(
+                                    right: 10, bottom: 10),
+                                alignment: Alignment.center,
+                                height: 40,
+                                width: 30,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: Colors.transparent,
+                                ),
+                                child: const Icon(
+                                  Icons.arrow_forward_ios_sharp,
+                                  color: Colors.white,
+                                  size: 30,
+                                ),
                               ),
                             ),
                           ),
@@ -264,32 +276,37 @@ class _HomePageState extends State<HomePage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Container(
-                        width: w * 0.4,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: const Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.details_rounded,
-                              color: Colors.black,
-                              size: 20,
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              "SOS",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 20),
-                            )
-                          ],
+                      InkWell(
+                        onTap: () {
+                          Get.to(Sos());
+                        },
+                        child: Container(
+                          width: w * 0.4,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: const Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.details_rounded,
+                                color: Colors.black,
+                                size: 17,
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                "SOS",
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 17),
+                              )
+                            ],
+                          ),
                         ),
                       ),
                       Container(
@@ -305,15 +322,17 @@ class _HomePageState extends State<HomePage> {
                             Icon(
                               Icons.call,
                               color: Colors.black,
-                              size: 20,
+                              size: 17,
                             ),
                             SizedBox(
                               width: 10,
                             ),
                             Text(
                               "Call",
-                              style:
-                                  TextStyle(color: Colors.black, fontSize: 20),
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.w600),
                             )
                           ],
                         ),
@@ -321,61 +340,75 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                   const SizedBox(
-                    height: 20,
+                    height: 10,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Container(
-                        width: w * 0.4,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: const Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.next_week_rounded,
-                              color: Colors.black,
-                              size: 20,
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              "Pass",
-                              style:
-                                  TextStyle(color: Colors.black, fontSize: 20),
-                            )
-                          ],
+                      InkWell(
+                        onTap: () {
+                          Get.to(Pass());
+                        },
+                        child: Container(
+                          width: w * 0.4,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: const Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.next_week_rounded,
+                                color: Colors.black,
+                                size: 17,
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                "Pass",
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.w600),
+                              )
+                            ],
+                          ),
                         ),
                       ),
-                      Container(
-                        width: w * 0.4,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: const Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.receipt_long_sharp,
-                              color: Colors.black,
-                              size: 20,
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              "Logs",
-                              style:
-                                  TextStyle(color: Colors.black, fontSize: 20),
-                            )
-                          ],
+                      InkWell(
+                        onTap: () {
+                          Get.to(Logs());
+                        },
+                        child: Container(
+                          width: w * 0.4,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: const Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.receipt_long_sharp,
+                                color: Colors.black,
+                                size: 17,
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                "Logs",
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.w600),
+                              )
+                            ],
+                          ),
                         ),
                       )
                     ],
@@ -398,7 +431,8 @@ class _HomePageState extends State<HomePage> {
       child: Container(
         margin: const EdgeInsets.only(right: 15.0),
         decoration: BoxDecoration(
-          border: Border.all(width: 3, color: Colors.white),
+          border: Border.all(
+              width: 3, color: (index == 0) ? Colors.green : Colors.red),
           borderRadius: BorderRadius.circular(10),
           image: DecorationImage(fit: BoxFit.cover, image: AssetImage(image)),
         ),

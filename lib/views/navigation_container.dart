@@ -2,7 +2,7 @@ import 'package:coal_tracking_app/views/pages/empty.dart';
 // import 'package:frontend/views/pages/details_screen.dart';
 // import 'package:frontend/views/pages/expense_folder/expense_manager.dart';
 // import 'package:frontend/views/pages/explore_folder/explore.dart';
-import 'package:coal_tracking_app/views/pages/homepage.dart';
+import 'package:coal_tracking_app/views/pages/homepage_folder/homepage.dart';
 import 'package:coal_tracking_app/views/pages/profile_folder/profile.dart';
 import 'package:flutter/material.dart';
 // import 'package:frontend/views/pages/onboarding_folder/age.dart';
