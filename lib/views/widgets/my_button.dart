@@ -1,24 +1,23 @@
-import 'package:flutter/material.dart';
 import 'package:coal_tracking_app/utils/constants.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
+import 'package:flutter/material.dart';
 
 class MyButton extends StatelessWidget {
-  final Function()? onTap;
   final String text;
   final double h;
   final double w;
-  final bgcolor;
-  final textcolor;
+  final Color bgColor;
+  final Color textColor;
+  final VoidCallback onTap;
 
-  const MyButton(
-      {super.key,
-      required this.onTap,
-      this.text = "",
-      required this.h,
-      required this.w,
-      this.bgcolor = dark,
-      this.textcolor = Colors.white});
+  const MyButton({
+    super.key,
+    required this.onTap,
+    this.text = "",
+    required this.h,
+    required this.w,
+    this.bgColor = dark,
+    this.textColor = Colors.white,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -34,14 +33,14 @@ class MyButton extends StatelessWidget {
         //padding: const EdgeInsets.all(20),
         //margin: const EdgeInsets.symmetric(horizontal: 20),
         decoration: BoxDecoration(
-          color: bgcolor,
+          color: bgColor,
           borderRadius: BorderRadius.circular(height * 0.01),
         ),
         child: Center(
           child: Text(
             text,
             style: TextStyle(
-              color: textcolor,
+              color: textColor,
               fontWeight: FontWeight.bold,
               fontSize: height * 0.02,
             ),
