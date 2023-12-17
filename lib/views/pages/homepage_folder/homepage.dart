@@ -42,7 +42,7 @@ class _HomePageState extends State<HomePage> {
         title: Transform(
           // you can forcefully translate values left side using Transform
           transform: Matrix4.translationValues(-20.0, 0.0, 0.0),
-          child: Text(
+          child: const Text(
             "Bhopal, M.P.",
             style: TextStyle(
               color: Colors.black,
@@ -50,7 +50,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         leading: Container(
-          child: Row(
+          child: const Row(
             children: [
               SizedBox(
                 width: 20,
@@ -76,7 +76,7 @@ class _HomePageState extends State<HomePage> {
         actions: [
           IconButton(
             onPressed: () {
-              Get.to(Notifications());
+              Get.to(const Notifications());
             },
             icon: const Icon(
               Icons.notifications,
@@ -85,7 +85,7 @@ class _HomePageState extends State<HomePage> {
           ),
           IconButton(
             onPressed: () {
-              Get.to(Chat());
+              Get.to(const Chat());
             },
             icon: const Icon(
               Icons.chat,
@@ -119,7 +119,7 @@ class _HomePageState extends State<HomePage> {
                     children: <Widget>[
                       RichText(
                         text: TextSpan(
-                          style: TextStyle(color: Colors.black),
+                          style: const TextStyle(color: Colors.black),
                           children: [
                             TextSpan(
                               text: 'Hello, ',
@@ -343,7 +343,7 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       InkWell(
                         onTap: () {
-                          Get.to(Sos());
+                          Get.to(const Sos());
                         },
                         child: Container(
                           width: w * 0.4,
@@ -412,7 +412,7 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       InkWell(
                         onTap: () {
-                          Get.to(Pass());
+                          Get.to(const Pass());
                         },
                         child: Container(
                           width: w * 0.4,
@@ -445,7 +445,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       InkWell(
                         onTap: () {
-                          Get.to(Logs());
+                          Get.to(const Logs());
                         },
                         child: Container(
                           width: w * 0.4,
