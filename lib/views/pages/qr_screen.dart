@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:coal_tracking_app/models/qr_model.dart';
 import 'package:coal_tracking_app/views/pages/qr_overlay.dart';
 import 'package:coal_tracking_app/views/pages/trip_details.dart';
 import 'package:coal_tracking_app/views/widgets/loading.dart';
@@ -74,10 +77,13 @@ class _QRSCreenState extends State<QRSCreen> {
                 final List<Barcode> barcodes = capture.barcodes;
                 //final Uint8List? image = capture.image;
                 for (final barcode in barcodes) {
-                  if (barcode.rawValue!.contains('geo:')) {
-                    Map<String, double> geoData =
-                        parseGeoData(barcode.rawValue!);
-                    debugPrint('Barcode found! ${geoData['latitude']}');
+                  print(barcode.rawValue);
+                  if (barcode.rawValue!.contains('final_destination')) {
+                    // print(barcode.rawValue);
+                    QRModel qrmodel = qrModelJson(barcode.rawValue!);
+                    // Map<String, double> geoData =
+                    //     parseGeoData(barcode.rawValue!);
+                    //debugPrint('Barcode found! ${geoData['latitude']}');
                     Position position = await _determinePosition();
                     setState(() {
                       _isLoading = false;
@@ -86,8 +92,8 @@ class _QRSCreenState extends State<QRSCreen> {
                       TripDetails(
                         originLatitude: position.latitude!,
                         originLongitude: position.longitude!,
-                        destLatitude: geoData['latitude']!,
-                        destLongitude: geoData['longitude']!,
+                        destLatitude: qrmodel.finalDestination!.lat!,
+                        destLongitude: qrmodel.finalDestination!.lng!,
                       ),
                     );
                   }

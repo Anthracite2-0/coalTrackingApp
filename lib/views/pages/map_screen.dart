@@ -37,7 +37,7 @@ class _MapScreenState extends State<MapScreen> {
   String googleAPiKey = apiKey;
 
   List<String> images = [
-    'assets/images/delivery-truck.png',
+    'assets/images/box-truck.png',
   ];
 
   Uint8List? markerImage;
@@ -289,7 +289,7 @@ class _MapScreenState extends State<MapScreen> {
               ],
             ),
           ),
-          LatLng(28.6542996, 77.4908477),
+          LatLng(position.latitude, position.longitude),
         );
       },
     );
