@@ -37,15 +37,42 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       appBar: AppBar(
-        centerTitle: true,
-        //title: const Text('AppBar'),
-        leading: IconButton(
-          onPressed: () {},
-          icon: const Icon(
-            Icons.menu,
-            color: Color(0xff161A30),
+        centerTitle: false,
+        titleSpacing: 13.0,
+        title: Transform(
+          // you can forcefully translate values left side using Transform
+          transform: Matrix4.translationValues(-20.0, 0.0, 0.0),
+          child: Text(
+            "Bhopal, M.P.",
+            style: TextStyle(
+              color: Colors.black,
+            ),
           ),
         ),
+        leading: Container(
+          child: Row(
+            children: [
+              SizedBox(
+                width: 20,
+              ),
+              Icon(
+                Icons.location_on,
+                color: Colors.black,
+              ),
+            ],
+          ),
+        ),
+        // title:  Text(
+        //   'AppBar',
+        //   style: TextStyle(color: Colors.black),
+        // ),
+        // leading: IconButton(
+        //   onPressed: () {},
+        //   icon: const Icon(
+        //     Icons.menu,
+        //     color: Color(0xff161A30),
+        //   ),
+        // ),
         actions: [
           IconButton(
             onPressed: () {
@@ -113,14 +140,45 @@ class _HomePageState extends State<HomePage> {
                       const SizedBox(
                         height: 16,
                       ),
-                      const Text(
-                        'You are in Bhopal',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+                      RichText(
+                        text: const TextSpan(
+                          style: TextStyle(color: Colors.black),
+                          children: [
+                            TextSpan(
+                              text: 'You are currently ',
+                              style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey,
+                              ),
+                            ),
+                            TextSpan(
+                              text: 'online ',
+                              style: TextStyle(
+                                color: Colors.green,
+                                fontSize: 13,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            TextSpan(
+                              text: 'and heading\ntowards Ghaziabad',
+                              style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
+                      // const Text(
+                      //   'You are currently online and heading\ntowards Ghaziabad',
+                      //   style: TextStyle(
+                      //     color: Colors.grey,
+                      //     fontSize: 15,
+                      //     fontWeight: FontWeight.bold,
+                      //   ),
+                      // ),
                       const SizedBox(
                         height: 12,
                       ),
@@ -174,10 +232,10 @@ class _HomePageState extends State<HomePage> {
                         // );
                       },
                       child: const Text(
-                        "12 km to Bhopal",
+                        "12 km to Ghaz.",
                         style: TextStyle(
                           color: Colors.black,
-                          fontSize: 16,
+                          fontSize: 14,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
