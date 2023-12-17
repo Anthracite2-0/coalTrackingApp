@@ -204,6 +204,7 @@ class _HomePageState extends State<HomePage> {
                   SizedBox(
                     height: 140,
                     child: ListView(
+                      physics: const BouncingScrollPhysics(),
                       scrollDirection: Axis.horizontal,
                       children: <Widget>[
                         promoCard('assets/images/fakeMap.jpg', 0),
