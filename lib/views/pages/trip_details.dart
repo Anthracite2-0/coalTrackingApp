@@ -1,6 +1,6 @@
 import 'package:coal_tracking_app/utils/constants.dart';
 import 'package:coal_tracking_app/views/pages/map_screen.dart';
-import 'package:coal_tracking_app/views/pages/homepage.dart';
+import 'package:coal_tracking_app/views/pages/homepage_folder/homepage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:get/get.dart';

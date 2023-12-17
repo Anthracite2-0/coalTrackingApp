@@ -47,37 +47,3 @@ final kButtonTextStyle = TextStyle(
   fontWeight: FontWeight.w400,
   color: kDarkPrimaryColor,
 );
-
-final kDarkTheme = ThemeData(
-  brightness: Brightness.dark,
-  fontFamily: 'SFProText',
-  primaryColor: kDarkPrimaryColor,
-  canvasColor: kDarkPrimaryColor,
-  backgroundColor: kDarkSecondaryColor,
-  hintColor: kAccentColor,
-  iconTheme: ThemeData.dark().iconTheme.copyWith(
-        color: kLightSecondaryColor,
-      ),
-  textTheme: ThemeData.dark().textTheme.apply(
-        fontFamily: 'SFProText',
-        bodyColor: kLightSecondaryColor,
-        displayColor: kLightSecondaryColor,
-      ),
-);
-
-final kLightTheme = ThemeData(
-  brightness: Brightness.light,
-  fontFamily: 'SFProText',
-  primaryColor: kLightPrimaryColor,
-  canvasColor: kLightPrimaryColor,
-  backgroundColor: kLightSecondaryColor,
-  hintColor: kAccentColor,
-  iconTheme: ThemeData.light().iconTheme.copyWith(
-        color: kDarkSecondaryColor,
-      ),
-  textTheme: ThemeData.light().textTheme.apply(
-        fontFamily: 'SFProText',
-        bodyColor: kDarkSecondaryColor,
-        displayColor: kDarkSecondaryColor,
-      ),
-);

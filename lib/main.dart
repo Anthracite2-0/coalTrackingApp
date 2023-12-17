@@ -2,7 +2,7 @@ import 'package:coal_tracking_app/views/navigation_container.dart';
 import 'package:coal_tracking_app/views/pages/google_map_utils/current_location.dart';
 import 'package:coal_tracking_app/views/pages/google_map_utils/custom_marker_info_window.dart';
 import 'package:coal_tracking_app/views/pages/map_screen.dart';
-import 'package:coal_tracking_app/views/pages/homepage.dart';
+import 'package:coal_tracking_app/views/pages/homepage_folder/homepage.dart';
 import 'package:coal_tracking_app/views/pages/login_folder/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
