@@ -48,7 +48,7 @@ class _TripDetailsState extends State<TripDetails> {
   }
 
   void showSnackBar(BuildContext context) {
-    final snackBar = SnackBar(
+    final snackBar = const SnackBar(
       content: Text('Selection made'),
       duration: Duration(milliseconds: 80),
     );
@@ -97,10 +97,10 @@ class _TripDetailsState extends State<TripDetails> {
                     child: Container(
                       height: h * 0.05,
                       width: w * 0.4,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                           color: Colors.black,
                           borderRadius: BorderRadius.all(Radius.circular(10))),
-                      child: Center(
+                      child: const Center(
                         child: Text(
                           "Decline",
                           style: TextStyle(color: Colors.white),
@@ -120,10 +120,10 @@ class _TripDetailsState extends State<TripDetails> {
                     child: Container(
                       height: h * 0.05,
                       width: w * 0.4,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                           color: Colors.black,
                           borderRadius: BorderRadius.all(Radius.circular(10))),
-                      child: Center(
+                      child: const Center(
                         child: Text(
                           "Accept",
                           style: TextStyle(color: Colors.white),
@@ -152,7 +152,7 @@ class _TripDetailsState extends State<TripDetails> {
   }
 
   _addPolyLine() {
-    PolylineId id = PolylineId("poly");
+    PolylineId id = const PolylineId("poly");
     Polyline polyline = Polyline(
         polylineId: id, color: Colors.red, points: polylineCoordinates);
     polylines[id] = polyline;
