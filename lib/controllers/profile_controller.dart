@@ -9,7 +9,7 @@ class ProfileController extends GetxController {
   RxBool isLoading = RxBool(false);
   Future<void> fetchProfileData(String mobileNumber) async {
     final url =
-        'http://192.168.29.111:3000/api/v1/drivers/mobile/$mobileNumber';
+        'https://admin-server-production-a272.up.railway.app/api/v1/drivers/mobile/$mobileNumber';
     isLoading.value = true;
     try {
       final response = await http.get(Uri.parse(url));
