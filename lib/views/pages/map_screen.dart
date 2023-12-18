@@ -4,6 +4,7 @@ import 'dart:ui' as ui;
 import 'package:coal_tracking_app/controllers/map_controller.dart';
 import 'package:coal_tracking_app/models/map_screen_response_model.dart';
 import 'package:coal_tracking_app/utils/constants.dart';
+import 'package:coal_tracking_app/views/widgets/loading.dart';
 import 'package:custom_info_window/custom_info_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -177,55 +178,61 @@ class _MapScreenState extends State<MapScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: Stack(children: [
-          GoogleMap(
-            initialCameraPosition: CameraPosition(
-                target: LatLng(initialLat, initialLong), zoom: 15),
-            myLocationEnabled: true,
-            myLocationButtonEnabled: true,
-            tiltGesturesEnabled: true,
-            mapType: MapType.hybrid,
-            compassEnabled: true,
-            scrollGesturesEnabled: true,
-            zoomGesturesEnabled: true,
-            onMapCreated: _onMapCreated,
-            markers: Set<Marker>.of(markers.values),
-            polylines: Set<Polyline>.of(polylines.values),
-            onTap: (position) {
-              _customInfoWindowController.hideInfoWindow!();
-            },
-            onCameraMove: (position) {
-              _customInfoWindowController.onCameraMove!();
-            },
-          ),
-          Positioned(
-              bottom: 30,
-              left: 20,
-              child: Container(
-                width: 50,
-                height: 50,
-                decoration: const BoxDecoration(
-                    shape: BoxShape.circle, color: Colors.black),
-                child: Center(
-                  child: IconButton(
-                    icon: const Icon(
-                      Icons.navigation_outlined,
-                      color: Colors.white,
+        body: Obx(() {
+          if (_mapController.isLoading.value == true) {
+            return const Center(child: Loading());
+          } else {
+            return Stack(children: [
+              GoogleMap(
+                initialCameraPosition: CameraPosition(
+                    target: LatLng(initialLat, initialLong), zoom: 15),
+                myLocationEnabled: true,
+                myLocationButtonEnabled: true,
+                tiltGesturesEnabled: true,
+                mapType: MapType.hybrid,
+                compassEnabled: true,
+                scrollGesturesEnabled: true,
+                zoomGesturesEnabled: true,
+                onMapCreated: _onMapCreated,
+                markers: Set<Marker>.of(markers.values),
+                polylines: Set<Polyline>.of(polylines.values),
+                onTap: (position) {
+                  _customInfoWindowController.hideInfoWindow!();
+                },
+                onCameraMove: (position) {
+                  _customInfoWindowController.onCameraMove!();
+                },
+              ),
+              Positioned(
+                  bottom: 30,
+                  left: 20,
+                  child: Container(
+                    width: 50,
+                    height: 50,
+                    decoration: const BoxDecoration(
+                        shape: BoxShape.circle, color: Colors.black),
+                    child: Center(
+                      child: IconButton(
+                        icon: const Icon(
+                          Icons.navigation_outlined,
+                          color: Colors.white,
+                        ),
+                        onPressed: () async {
+                          await launchUrl(Uri.parse(
+                              'google.navigation:q=${finalLat}, ${finalLong}&key=AIzaSyCtz4qxThjgX4v-LqdqyHsqLMpUVvGAi3E'));
+                        },
+                      ),
                     ),
-                    onPressed: () async {
-                      await launchUrl(Uri.parse(
-                          'google.navigation:q=${finalLat}, ${finalLong}&key=AIzaSyCtz4qxThjgX4v-LqdqyHsqLMpUVvGAi3E'));
-                    },
-                  ),
-                ),
-              )),
-          CustomInfoWindow(
-            controller: _customInfoWindowController,
-            height: 200,
-            width: 300,
-            offset: 35,
-          ),
-        ]),
+                  )),
+              CustomInfoWindow(
+                controller: _customInfoWindowController,
+                height: 200,
+                width: 300,
+                offset: 35,
+              ),
+            ]);
+          }
+        }),
         // floatingActionButton: FloatingActionButton.extended(
         //   onPressed: () async {
         //     setState(() {});
