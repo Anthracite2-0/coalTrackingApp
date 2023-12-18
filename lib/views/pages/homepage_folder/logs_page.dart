@@ -13,12 +13,24 @@ class LogsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Location Logs'),
-        backgroundColor: Colors.deepOrange,
+        backgroundColor: const Color(0xff161A30),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 24.0),
-        child: Obx(() {
-          return Column(
+      body: Obx(() {
+        if (logsController.displayedOrderIds.isEmpty) {
+          return Center(
+            child: Text(
+              'No location logs found',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                fontFamily: GoogleFonts.poppins().fontFamily,
+              ),
+            ),
+          );
+        }
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 24.0),
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
@@ -132,9 +144,9 @@ class LogsPage extends StatelessWidget {
                 ),
               ),
             ],
-          );
-        }),
-      ),
+          ),
+        );
+      }),
     );
   }
 }
