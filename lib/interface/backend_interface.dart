@@ -33,7 +33,6 @@ class BackendInterface {
       return acceptRideResponseJson(response.body);
     } else {
       return acceptRideResponseJson(response.body);
-      ;
     }
   }
 }
