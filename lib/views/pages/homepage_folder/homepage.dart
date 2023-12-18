@@ -269,10 +269,14 @@ class _HomePageState extends State<HomePage> {
                       physics: const BouncingScrollPhysics(),
                       scrollDirection: Axis.horizontal,
                       children: <Widget>[
-                        promoCard('assets/images/fakeMap.jpg', 0),
-                        promoCard('assets/images/fakeMap(2).jpg', 1),
-                        promoCard('assets/images/fakeMap(3).jpg', 2),
-                        promoCard('assets/images/fakeMap(2).jpg', 3),
+                        promoCard(
+                            'assets/images/fakeMap.jpg', 0, 25, "25 Sept"),
+                        promoCard(
+                            'assets/images/fakeMap(2).jpg', 1, 36, "31 Nov"),
+                        promoCard(
+                            'assets/images/fakeMap(3).jpg', 2, 56, "6 Sept"),
+                        promoCard(
+                            'assets/images/fakeMap(2).jpg', 3, 56, "5 Jan"),
                       ],
                     ),
                   ),
@@ -498,32 +502,90 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget promoCard(image, index) {
+  Widget promoCard(image, index, orderId, date) {
     return AspectRatio(
       aspectRatio: 2.62 / 3,
       child: Container(
         margin: const EdgeInsets.only(right: 15.0),
         decoration: BoxDecoration(
           border: Border.all(
-              width: 3, color: (index == 0) ? Colors.green : Colors.red),
+              width: 3,
+              color:
+                  (index == 0) ? Colors.green.shade400 : Colors.red.shade400),
           borderRadius: BorderRadius.circular(10),
           image: DecorationImage(fit: BoxFit.cover, image: AssetImage(image)),
         ),
-        child: Container(
-          decoration: BoxDecoration(
-            //border: Border.all(width: 2, color: Colors.white),
-            borderRadius: BorderRadius.circular(10),
-            gradient: LinearGradient(
-              begin: Alignment.bottomRight,
-              stops: const [0.1, 0.9],
-              colors: (index == 0)
-                  ? [Colors.black.withOpacity(0), Colors.black.withOpacity(0)]
-                  : [
-                      Colors.black.withOpacity(0.8),
-                      Colors.black.withOpacity(0.5)
-                    ],
+        child: Stack(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                //border: Border.all(width: 2, color: Colors.white),
+                borderRadius: BorderRadius.circular(10),
+                gradient: LinearGradient(
+                  begin: Alignment.bottomRight,
+                  stops: const [0.1, 0.9],
+                  colors: (index == 0)
+                      ? [
+                          Colors.black.withOpacity(0),
+                          Colors.black.withOpacity(0)
+                        ]
+                      : [
+                          Colors.black.withOpacity(0.8),
+                          Colors.black.withOpacity(0.5)
+                        ],
+                ),
+              ),
             ),
-          ),
+            (index == 0)
+                ? Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Center(
+                        child: Container(
+                          padding: EdgeInsets.all(2),
+                          color: Colors.green,
+                          child: Text(
+                            "LIVE",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                      Center(
+                          child: SizedBox(
+                        height: 4,
+                      )),
+                    ],
+                  )
+                : Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Center(
+                        child: Text(
+                          "Order Id: $orderId",
+                          style: TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      Center(
+                          child: SizedBox(
+                        height: 2,
+                      )),
+                      Center(
+                        child: Text(
+                          "Date: $date",
+                          style: TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      Center(
+                          child: SizedBox(
+                        height: 4,
+                      )),
+                    ],
+                  )
+          ],
         ),
       ),
     );
