@@ -1,6 +1,6 @@
 // import 'package:coal_tracking_app/current_location.dart';
 import 'package:coal_tracking_app/views/pages/homepage_folder/chat.dart';
-import 'package:coal_tracking_app/views/pages/homepage_folder/logs.dart';
+import 'package:coal_tracking_app/views/pages/homepage_folder/logs_page.dart';
 import 'package:coal_tracking_app/views/pages/homepage_folder/notifications.dart';
 import 'package:coal_tracking_app/views/pages/homepage_folder/pass.dart';
 import 'package:coal_tracking_app/views/pages/homepage_folder/sos.dart';
@@ -447,7 +447,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       InkWell(
                         onTap: () {
-                          Get.to(const Logs());
+                          Get.to(LogsPage());
                         },
                         child: Container(
                           width: w * 0.4,
