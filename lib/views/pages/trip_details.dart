@@ -155,11 +155,7 @@ class _TripDetailsState extends State<TripDetails> {
                           setState(() {
                             isApiCallProcess = false;
                           });
-                          Get.off(MapScreen(
-                              originLatitude: widget.originLatitude,
-                              originLongitude: widget.originLongitude,
-                              destLatitude: widget.destLatitude,
-                              destLongitude: widget.destLongitude));
+                          Get.off(MapScreen());
                         } else {
                           AlertDialog alert = AlertDialog(
                             title: Text("Error"),
