@@ -1,27 +1,22 @@
 import 'dart:async';
 import 'dart:ui' as ui;
 
+import 'package:coal_tracking_app/controllers/map_controller.dart';
+import 'package:coal_tracking_app/models/map_screen_response_model.dart';
 import 'package:coal_tracking_app/utils/constants.dart';
 import 'package:custom_info_window/custom_info_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MapScreen extends StatefulWidget {
-  final double originLatitude;
-  final double originLongitude;
-  final double destLatitude;
-  final double destLongitude;
-  const MapScreen(
-      {Key? key,
-      required this.originLatitude,
-      required this.originLongitude,
-      required this.destLatitude,
-      required this.destLongitude})
-      : super(key: key);
+  const MapScreen({
+    Key? key,
+  }) : super(key: key);
   @override
   _MapScreenState createState() => _MapScreenState();
 }
@@ -35,6 +30,11 @@ class _MapScreenState extends State<MapScreen> {
   List<LatLng> polylineCoordinates = [];
   PolylinePoints polylinePoints = PolylinePoints();
   String googleAPiKey = apiKey;
+  final MapController _mapController = Get.put(MapController());
+  double initialLat = 0.0;
+  double initialLong = 0.0;
+  double finalLat = 0.0;
+  double finalLong = 0.0;
 
   List<String> images = [
     'assets/images/box-truck.png',
@@ -91,19 +91,51 @@ class _MapScreenState extends State<MapScreen> {
   void initState() {
     super.initState();
 
-    /// origin marker
-    _addMarker(LatLng(widget.originLatitude, widget.originLongitude), "origin",
-        BitmapDescriptor.defaultMarker);
+    _mapController.getMapData().then((_) => _loadData());
+    // initialLat = double.parse(_mapController.initialLtd.value);
+    // initialLong = double.parse(_mapController.initialLong.value);
+    // finalLat = double.parse(_mapController.finalLat.value);
+    // finalLong = double.parse(_mapController.finalLong.value);
+    // print(double.parse(_mapController.finalLat.value));
 
-    /// destination marker
-    _addMarker(LatLng(widget.destLatitude, widget.destLongitude), "destination",
-        BitmapDescriptor.defaultMarkerWithHue(90));
+    // /// origin marker
+    // _addMarker(
+    //     LatLng(double.parse(_mapController.initialLtd.value),
+    //         double.parse(_mapController.initialLong.value)),
+    //     "origin",
+    //     BitmapDescriptor.defaultMarker);
+    // print(double.parse(_mapController.finalLat.value));
 
-    _getPolyline();
-    _loadData();
+    // /// destination marker
+    // _addMarker(
+    //     LatLng(double.parse(_mapController.finalLat.value),
+    //         double.parse(_mapController.finalLong.value)),
+    //     "destination",
+    //     BitmapDescriptor.defaultMarkerWithHue(90));
+
+    // _getPolyline();
+    // _loadData();
   }
 
   Future<void> _loadData() async {
+    //print(double.parse(_mapController.finalLat.value));
+
+    /// origin marker
+    await _addMarker(
+        LatLng(double.parse(_mapController.initialLtd.value),
+            double.parse(_mapController.initialLong.value)),
+        "origin",
+        BitmapDescriptor.defaultMarker);
+    // print(double.parse(_mapController.finalLat.value));
+
+    /// destination marker
+    await _addMarker(
+        LatLng(double.parse(_mapController.finalLat.value),
+            double.parse(_mapController.finalLong.value)),
+        "destination",
+        BitmapDescriptor.defaultMarkerWithHue(90));
+
+    await _getPolyline();
     Position position = await _determinePosition();
 
     mapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
@@ -113,12 +145,12 @@ class _MapScreenState extends State<MapScreen> {
 
     await _addTruckMarker(
         LatLng(position.latitude, position.longitude), "truck");
-    await _addMarker(LatLng(widget.originLatitude, widget.originLongitude),
-        "origin", BitmapDescriptor.defaultMarker);
+    await _addMarker(LatLng(initialLat, initialLong), "origin",
+        BitmapDescriptor.defaultMarker);
 
     /// destination marker
-    await _addMarker(LatLng(widget.destLatitude, widget.destLongitude),
-        "destination", BitmapDescriptor.defaultMarkerWithHue(90));
+    await _addMarker(LatLng(finalLat, finalLong), "destination",
+        BitmapDescriptor.defaultMarkerWithHue(90));
     setState(() {});
 
     Timer.periodic(const Duration(seconds: 5), (timer) {
@@ -132,12 +164,12 @@ class _MapScreenState extends State<MapScreen> {
 
     await _addTruckMarker(
         LatLng(position.latitude, position.longitude), "truck");
-    await _addMarker(LatLng(widget.originLatitude, widget.originLongitude),
-        "origin", BitmapDescriptor.defaultMarker);
+    await _addMarker(LatLng(initialLat, initialLong), "origin",
+        BitmapDescriptor.defaultMarker);
 
     /// destination marker
-    await _addMarker(LatLng(widget.destLatitude, widget.destLongitude),
-        "destination", BitmapDescriptor.defaultMarkerWithHue(90));
+    await _addMarker(LatLng(finalLat, finalLong), "destination",
+        BitmapDescriptor.defaultMarkerWithHue(90));
     setState(() {});
   }
 
@@ -148,8 +180,7 @@ class _MapScreenState extends State<MapScreen> {
         body: Stack(children: [
           GoogleMap(
             initialCameraPosition: CameraPosition(
-                target: LatLng(widget.originLatitude, widget.originLongitude),
-                zoom: 15),
+                target: LatLng(initialLat, initialLong), zoom: 15),
             myLocationEnabled: true,
             myLocationButtonEnabled: true,
             tiltGesturesEnabled: true,
@@ -183,7 +214,7 @@ class _MapScreenState extends State<MapScreen> {
                     ),
                     onPressed: () async {
                       await launchUrl(Uri.parse(
-                          'google.navigation:q=${widget.destLatitude}, ${widget.destLongitude}&key=AIzaSyCtz4qxThjgX4v-LqdqyHsqLMpUVvGAi3E'));
+                          'google.navigation:q=${finalLat}, ${finalLong}&key=AIzaSyCtz4qxThjgX4v-LqdqyHsqLMpUVvGAi3E'));
                     },
                   ),
                 ),
@@ -307,8 +338,10 @@ class _MapScreenState extends State<MapScreen> {
   _getPolyline() async {
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
         googleAPiKey,
-        PointLatLng(widget.originLatitude, widget.originLongitude),
-        PointLatLng(widget.destLatitude, widget.destLongitude),
+        PointLatLng(double.parse(_mapController.initialLtd.value),
+            double.parse(_mapController.initialLong.value)),
+        PointLatLng(double.parse(_mapController.finalLat.value),
+            double.parse(_mapController.finalLong.value)),
         travelMode: TravelMode.driving,
         wayPoints: [PolylineWayPoint(location: "")]);
     if (result.points.isNotEmpty) {
