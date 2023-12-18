@@ -90,9 +90,33 @@ class _TripDetailsState extends State<TripDetails> {
           decoration: BoxDecoration(
               color: Colors.white, borderRadius: BorderRadius.circular(40)),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            //mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              Expanded(child: Container()),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(10),
+                    margin: EdgeInsets.fromLTRB(0, 0, 0, 7),
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Text(
+                      "Trip Details",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.white),
+                    ),
+                  )
+                ],
+              ),
+              Text("Initial Position: Bhopal"),
+              Text("Final Position: Ghaziabad"),
+              Text("Dropoff: 10:50 PM"),
+              Text("OrderID: 65"),
+              Expanded(child: Container()),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -149,12 +173,6 @@ class _TripDetailsState extends State<TripDetails> {
                           );
                         }
                       });
-
-                      // Get.off(MapScreen(
-                      //     originLatitude: widget.originLatitude,
-                      //     originLongitude: widget.originLongitude,
-                      //     destLatitude: widget.destLatitude,
-                      //     destLongitude: widget.destLongitude));
                     },
                     child: Container(
                       height: h * 0.05,
@@ -171,7 +189,11 @@ class _TripDetailsState extends State<TripDetails> {
                     ),
                   ),
                 ],
-              )
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Expanded(child: Container()),
             ],
           ),
         ),

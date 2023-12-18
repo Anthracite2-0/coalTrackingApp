@@ -543,7 +543,10 @@ class _HomePageState extends State<HomePage> {
                       Center(
                         child: Container(
                           padding: EdgeInsets.all(2),
-                          color: Colors.green,
+                          decoration: BoxDecoration(
+                            color: Colors.green,
+                            borderRadius: BorderRadius.circular(5),
+                          ),
                           child: Text(
                             "LIVE",
                             style: TextStyle(
