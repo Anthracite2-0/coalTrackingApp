@@ -39,6 +39,8 @@ dependencies:
   geolocator: ^10.1.0
   google_maps_flutter: ^2.5.0
   permission_handler: ^11.0.0
+  sqflite: ^2.3.0
+  path: ^1.8.3
   # background_fetch: ^1.2.1
 
 
