@@ -1,8 +1,4 @@
 import 'package:coal_tracking_app/views/navigation_container.dart';
-import 'package:coal_tracking_app/views/pages/google_map_utils/current_location.dart';
-import 'package:coal_tracking_app/views/pages/google_map_utils/custom_marker_info_window.dart';
-import 'package:coal_tracking_app/views/pages/map_screen.dart';
-import 'package:coal_tracking_app/views/pages/homepage_folder/homepage.dart';
 import 'package:coal_tracking_app/views/pages/login_folder/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -10,6 +6,25 @@ import 'package:get/get.dart';
 import 'controllers/login_controller.dart';
 
 void main() {
+  // WidgetsFlutterBinding.ensureInitialized();
+  // var locationDB = LocationDatabase();
+  // for (int i = 100; i < 200; i++) {
+  //   LocationLogs location = LocationLogs(
+  //       orderId: 'order$i',
+  //       latitude: 40.7128,
+  //       longitude: -74.0060,
+  //       timestamp: DateTime.now().millisecondsSinceEpoch);
+  //   await locationDB.insertLocation(location);
+  // }
+
+  // Retrieving location logs for a specific orderId
+  // List<LocationLogs> order123Locations =
+  //     await locationDB.getLocationsForOrder('order123');
+  // print('Locations for order123: $order123Locations');
+  //
+  // // Retrieving all unique order IDs
+  // List<String> allOrderIds = await locationDB.getAllOrderIds();
+  // print('All Order IDs: $allOrderIds');
   runApp(const MyApp());
 }
 

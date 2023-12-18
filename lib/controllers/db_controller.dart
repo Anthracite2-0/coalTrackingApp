@@ -58,4 +58,15 @@ class LocationDatabase {
     }
     return orderIds;
   }
+
+  Future<List<String>> getAllOrderIdsSortedByTimestamp() async {
+    final db = await database;
+    List<Map<String, dynamic>> result = await db.rawQuery(
+        'SELECT DISTINCT orderId FROM locations ORDER BY timestamp DESC');
+    List<String> orderIds = [];
+    for (var item in result) {
+      orderIds.add(item['orderId'] as String);
+    }
+    return orderIds;
+  }
 }
