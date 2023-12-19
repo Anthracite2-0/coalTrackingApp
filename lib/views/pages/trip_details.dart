@@ -146,9 +146,11 @@ class _TripDetailsState extends State<TripDetails> {
                         isApiCallProcess = true;
                       });
                       AcceptRideModel acceptRideModel = AcceptRideModel(
-                        mobile: "9876567898",
-                        orderId: "10",
-                      );
+                          mobile: "9876567898",
+                          orderId: "10",
+                          location: Location(
+                              lat: widget.originLatitude,
+                              long: widget.originLongitude));
                       BackendInterface.accept(acceptRideModel)
                           .then((Response) async {
                         if (Response.success == true) {

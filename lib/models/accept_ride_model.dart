@@ -25,8 +25,8 @@ class AcceptRideModel {
 }
 
 class Location {
-  int? lat;
-  int? long;
+  double? lat;
+  double? long;
 
   Location({this.lat, this.long});
 

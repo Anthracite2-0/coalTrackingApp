@@ -152,11 +152,17 @@ class _MapScreenState extends State<MapScreen> {
 
     await _addTruckMarker(
         LatLng(position.latitude, position.longitude), "truck");
-    await _addMarker(LatLng(initialLat, initialLong), "origin",
+    await _addMarker(
+        LatLng(double.parse(_mapController.initialLtd.value),
+            double.parse(_mapController.initialLong.value)),
+        "origin",
         BitmapDescriptor.defaultMarker);
 
     /// destination marker
-    await _addMarker(LatLng(finalLat, finalLong), "destination",
+    await _addMarker(
+        LatLng(double.parse(_mapController.finalLat.value),
+            double.parse(_mapController.finalLong.value)),
+        "destination",
         BitmapDescriptor.defaultMarkerWithHue(90));
     setState(() {});
 
@@ -174,11 +180,17 @@ class _MapScreenState extends State<MapScreen> {
 
     await _addTruckMarker(
         LatLng(position.latitude, position.longitude), "truck");
-    await _addMarker(LatLng(initialLat, initialLong), "origin",
+    await _addMarker(
+        LatLng(double.parse(_mapController.initialLtd.value),
+            double.parse(_mapController.initialLong.value)),
+        "origin",
         BitmapDescriptor.defaultMarker);
 
     /// destination marker
-    await _addMarker(LatLng(finalLat, finalLong), "destination",
+    await _addMarker(
+        LatLng(double.parse(_mapController.finalLat.value),
+            double.parse(_mapController.finalLong.value)),
+        "destination",
         BitmapDescriptor.defaultMarkerWithHue(90));
     setState(() {});
   }
