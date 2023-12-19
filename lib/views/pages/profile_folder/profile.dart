@@ -26,7 +26,8 @@ class _ProfileState extends State<Profile> {
 
   @override
   void initState() {
-    profileController.fetchProfileData('9876567898');
+    (_) async => profileController
+        .fetchProfileData(await authController.getTokenFromDB() ?? "");
     super.initState();
   }
 
@@ -72,7 +73,6 @@ class _ProfileState extends State<Profile> {
       body: Obx(
         () {
           final userData = profileController.userData.value;
-
           if (userData == null) {
             if (profileController.isLoading.value == true) {
               return const Center(child: Loading());
@@ -98,8 +98,8 @@ class _ProfileState extends State<Profile> {
                         color: Colors.amber,
                       ),
                       SizedBox(
-                        height: width * 0.4,
-                        width: width * 0.4,
+                        height: width * 0.3,
+                        width: width * 0.3,
                         //margin: EdgeInsets.only(top: width * 3),
                         child: Stack(
                           children: <Widget>[
