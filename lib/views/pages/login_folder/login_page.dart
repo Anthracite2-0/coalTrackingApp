@@ -5,10 +5,12 @@ import 'package:coal_tracking_app/controllers/login_controller.dart';
 import 'package:coal_tracking_app/utils/constants.dart';
 // import 'package:coal_tracking_app/current_location.dart';
 import 'package:coal_tracking_app/views/navigation_container.dart';
+
 import 'package:coal_tracking_app/views/widgets/my_button.dart';
 import 'package:coal_tracking_app/views/widgets/my_textfield.dart';
 import 'package:coal_tracking_app/views/widgets/square_tile.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -27,7 +29,8 @@ class _LoginPageState extends State<LoginPage> {
   String email = "";
   String password = "";
   final AuthController authController = Get.find();
-
+  bool isMineOfficial = false;
+  final _storage = const FlutterSecureStorage();
   // sign user in method
   @override
   Widget build(BuildContext context) {
@@ -48,6 +51,9 @@ class _LoginPageState extends State<LoginPage> {
                   Icons.lock,
                   size: 100,
                   color: dark,
+                ),
+                Container(
+                  child: Text("Driver Login"),
                 ),
 
                 const SizedBox(height: 50),
@@ -83,11 +89,28 @@ class _LoginPageState extends State<LoginPage> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text(
-                        'Forgot Password?',
+                        'Mine Official? ',
                         style: TextStyle(
                           color: Colors.grey[600],
                           fontFamily: GoogleFonts.poppins().fontFamily,
                         ),
+                      ),
+                      Switch(
+                        // thumb color (round icon)
+                        activeColor: dark,
+                        activeTrackColor: Colors.grey,
+                        inactiveThumbColor: Colors.blueGrey.shade600,
+                        inactiveTrackColor: Colors.grey.shade400,
+                        splashRadius: 50.0,
+                        // boolean variable value
+                        value: isMineOfficial,
+                        // changes the state of the switch
+                        // onChanged: (value) =>
+                        //     setState(() => isMineOfficial = !isMineOfficial),
+
+                        onChanged: (value) {
+                          setState(() => isMineOfficial = !isMineOfficial);
+                        },
                       ),
                     ],
                   ),
@@ -105,8 +128,9 @@ class _LoginPageState extends State<LoginPage> {
                     Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute<void>(
-                        builder: (BuildContext context) =>
-                            const NavigationContainer(),
+                        builder: (BuildContext context) => NavigationContainer(
+                          isMineOfficial: isMineOfficial,
+                        ),
                       ),
                       (route) => false,
                     );
@@ -114,53 +138,64 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 const SizedBox(height: 50),
                 // or continue with
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Divider(
-                          thickness: 0.5,
-                          color: Colors.grey[400],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10.0,
-                        ),
-                        child: Text(
-                          'Or continue with',
-                          style: TextStyle(
-                            color: Colors.grey[700],
-                            fontFamily: GoogleFonts.poppins().fontFamily,
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: Divider(
-                          thickness: 0.5,
-                          color: Colors.grey[400],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                // Padding(
+                //   padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                //   child: Row(
+                //     children: [
+                //       Expanded(
+                //         child: Divider(
+                //           thickness: 0.5,
+                //           color: Colors.grey[400],
+                //         ),
+                //       ),
+                //       Padding(
+                //         padding: const EdgeInsets.symmetric(
+                //           horizontal: 10.0,
+                //         ),
+                //         child: Text(
+                //           'Or',
+                //           style: TextStyle(
+                //             color: Colors.grey[700],
+                //             fontFamily: GoogleFonts.poppins().fontFamily,
+                //           ),
+                //         ),
+                //       ),
+                //       Expanded(
+                //         child: Divider(
+                //           thickness: 0.5,
+                //           color: Colors.grey[400],
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
                 const SizedBox(height: 50),
                 // google + apple sign in buttons
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // google button
-                    SquareTile(
-                      imagePath: 'assets/images/google.png',
-                    ),
-                    SizedBox(width: 25),
-                    // apple button
-                    SquareTile(
-                      imagePath: 'assets/images/apple.png',
-                    )
-                  ],
-                ),
+                // const Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: [
+                //     // google button
+                //     SquareTile(
+                //       imagePath: 'assets/images/google.png',
+                //     ),
+                //     SizedBox(width: 25),
+                //     // apple button
+                //     SquareTile(
+                //       imagePath: 'assets/images/apple.png',
+                //     )
+                //   ],
+                // ),
+                // InkWell(
+                //   onTap: () {
+
+                //   },
+                //   child: Container(
+                //     child: Text(
+                //       "Are you mine Official ? Login Here",
+                //       style: TextStyle(fontWeight: FontWeight.bold),
+                //     ),
+                //   ),
+                // ),
                 const SizedBox(
                   height: 50,
                 ),
