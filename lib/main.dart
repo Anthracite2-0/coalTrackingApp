@@ -47,7 +47,9 @@ class MyApp extends StatelessWidget {
         init: AuthController(),
         builder: (authController) {
           if (authController.authState == AuthState.authenticated) {
-            return const NavigationContainer();
+            return NavigationContainer(
+              isMineOfficial: false,
+            );
           } else {
             return const LoginPage();
           }
