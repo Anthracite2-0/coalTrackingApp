@@ -96,9 +96,10 @@ class _MapScreenState extends State<MapScreen> {
   @override
   void initState() {
     super.initState();
+
     print("In mapscreen ");
-    _mapController.rideStarted();
     _mapController.getMapData().then((_) => _loadData());
+    _mapController.rideStarted();
     // initialLat = double.parse(_mapController.initialLtd.value);
     // initialLong = double.parse(_mapController.initialLong.value);
     // finalLat = double.parse(_mapController.finalLat.value);
@@ -186,10 +187,9 @@ class _MapScreenState extends State<MapScreen> {
   Future<void> sendCoordinates(String lat, String long) async {
     SendCoordinatesRequestModel sendCoordinatesRequestModel =
         SendCoordinatesRequestModel(
-            currentLat: x.toString(), currentLong: y.toString());
+            currentLat: x.toString(), currentLong: y.toString(), orderId: "10");
     SendCoordinatesResponseModel sendCoordinatesResponseModel =
-        await BackendInterface.sendCoordinates(
-            sendCoordinatesRequestModel, "10");
+        await BackendInterface.sendCoordinates(sendCoordinatesRequestModel);
     print(x);
     setState(() {
       x = x + 0.05;

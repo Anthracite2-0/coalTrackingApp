@@ -86,9 +86,10 @@ Future<void> sendCoordinates(String lat, String long) async {
       SendCoordinatesRequestModel(
     currentLat: lat,
     currentLong: long,
+    orderId: '10',
   );
   SendCoordinatesResponseModel sendCoordinatesResponseModel =
-      await BackendInterface.sendCoordinates(sendCoordinatesRequestModel, "10");
+      await BackendInterface.sendCoordinates(sendCoordinatesRequestModel);
   // print(x);
 
   return;
