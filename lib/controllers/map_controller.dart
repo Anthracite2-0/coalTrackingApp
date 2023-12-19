@@ -11,10 +11,10 @@ class MapController extends GetxController {
   var initialLong = "".obs;
   var finalLat = "".obs;
   var finalLong = "".obs;
-  SharedPreferences prefs = Get.find<SharedPreferences>();
+
   //var mapScreenResponseModel;
 
-  final storage = FlutterSecureStorage();
+  final storage = const FlutterSecureStorage();
 
   @override
   void onInit() async {
@@ -22,16 +22,21 @@ class MapController extends GetxController {
     getMapData();
   }
 
-  void rideStarted() {
+  void rideStarted() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool("rideStarted", true);
   }
 
-  void rideEnded() {
+  void rideEnded() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool("rideStarted", false);
   }
 
   Future<bool> getRideStatus() async {
-    return await prefs.getBool("rideStarted") ?? false;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.reload();
+    print("rideStarted: ${prefs.getBool("rideStarted")} ");
+    return prefs.getBool("rideStarted") ?? false;
   }
 
   Future<void> getMapData() async {
