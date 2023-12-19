@@ -4,6 +4,7 @@ import 'package:coal_tracking_app/views/pages/homepage_folder/logs_page.dart';
 import 'package:coal_tracking_app/views/pages/homepage_folder/notifications.dart';
 import 'package:coal_tracking_app/views/pages/homepage_folder/pass.dart';
 import 'package:coal_tracking_app/views/pages/homepage_folder/sos.dart';
+import 'package:coal_tracking_app/views/pages/map_screen.dart';
 import 'package:coal_tracking_app/views/pages/qr_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -284,7 +285,9 @@ class _HomePageState extends State<HomePage> {
                     height: 20,
                   ),
                   InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      Get.to(MapScreen());
+                    },
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10),
                       child: ColorFiltered(
@@ -503,92 +506,101 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget promoCard(image, index, orderId, date) {
-    return AspectRatio(
-      aspectRatio: 2.62 / 3,
-      child: Container(
-        margin: const EdgeInsets.only(right: 15.0),
-        decoration: BoxDecoration(
-          border: Border.all(
-              width: 3,
-              color:
-                  (index == 0) ? Colors.green.shade400 : Colors.red.shade400),
-          borderRadius: BorderRadius.circular(10),
-          image: DecorationImage(fit: BoxFit.cover, image: AssetImage(image)),
-        ),
-        child: Stack(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                //border: Border.all(width: 2, color: Colors.white),
-                borderRadius: BorderRadius.circular(10),
-                gradient: LinearGradient(
-                  begin: Alignment.bottomRight,
-                  stops: const [0.1, 0.9],
-                  colors: (index == 0)
-                      ? [
-                          Colors.black.withOpacity(0),
-                          Colors.black.withOpacity(0)
-                        ]
-                      : [
-                          Colors.black.withOpacity(0.8),
-                          Colors.black.withOpacity(0.5)
-                        ],
+    return InkWell(
+      onTap: () {
+        if (index == 0) {
+          Get.to(MapScreen());
+        }
+      },
+      child: AspectRatio(
+        aspectRatio: 2.62 / 3,
+        child: Container(
+          margin: const EdgeInsets.only(right: 15.0),
+          decoration: BoxDecoration(
+            border: Border.all(
+                width: 3,
+                color:
+                    (index == 0) ? Colors.green.shade400 : Colors.red.shade400),
+            borderRadius: BorderRadius.circular(10),
+            image: DecorationImage(fit: BoxFit.cover, image: AssetImage(image)),
+          ),
+          child: Stack(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  //border: Border.all(width: 2, color: Colors.white),
+                  borderRadius: BorderRadius.circular(10),
+                  gradient: LinearGradient(
+                    begin: Alignment.bottomRight,
+                    stops: const [0.1, 0.9],
+                    colors: (index == 0)
+                        ? [
+                            Colors.black.withOpacity(0),
+                            Colors.black.withOpacity(0)
+                          ]
+                        : [
+                            Colors.black.withOpacity(0.8),
+                            Colors.black.withOpacity(0.5)
+                          ],
+                  ),
                 ),
               ),
-            ),
-            (index == 0)
-                ? Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Center(
-                        child: Container(
-                          padding: EdgeInsets.all(2),
-                          decoration: BoxDecoration(
-                            color: Colors.green,
-                            borderRadius: BorderRadius.circular(5),
+              (index == 0)
+                  ? Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Center(
+                          child: Container(
+                            padding: EdgeInsets.all(2),
+                            decoration: BoxDecoration(
+                              color: Colors.green,
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: Text(
+                              "LIVE",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
                           ),
+                        ),
+                        Center(
+                            child: SizedBox(
+                          height: 4,
+                        )),
+                      ],
+                    )
+                  : Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Center(
                           child: Text(
-                            "LIVE",
+                            "Order Id: $orderId",
                             style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold),
                           ),
                         ),
-                      ),
-                      Center(
-                          child: SizedBox(
-                        height: 4,
-                      )),
-                    ],
-                  )
-                : Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Center(
-                        child: Text(
-                          "Order Id: $orderId",
-                          style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
+                        Center(
+                            child: SizedBox(
+                          height: 2,
+                        )),
+                        Center(
+                          child: Text(
+                            "Date: $date",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
                         ),
-                      ),
-                      Center(
-                          child: SizedBox(
-                        height: 2,
-                      )),
-                      Center(
-                        child: Text(
-                          "Date: $date",
-                          style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      Center(
-                          child: SizedBox(
-                        height: 4,
-                      )),
-                    ],
-                  )
-          ],
+                        Center(
+                            child: SizedBox(
+                          height: 4,
+                        )),
+                      ],
+                    )
+            ],
+          ),
         ),
       ),
     );

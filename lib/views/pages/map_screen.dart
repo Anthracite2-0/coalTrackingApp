@@ -89,6 +89,7 @@ class _MapScreenState extends State<MapScreen> {
   @override
   void dispose() {
     _customInfoWindowController.dispose();
+
     super.dispose();
   }
 

@@ -3,15 +3,18 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:coal_tracking_app/controllers/db_controller.dart';
-import 'package:coal_tracking_app/controllers/map_controller.dart';
 import 'package:coal_tracking_app/interface/backend_interface.dart';
 import 'package:coal_tracking_app/models/logs_model.dart';
 import 'package:coal_tracking_app/models/send_coordinates_reqeust_model.dart';
 import 'package:coal_tracking_app/models/send_coordinates_resposne_model.dart';
 import 'package:coal_tracking_app/views/pages/empty.dart';
 import 'package:coal_tracking_app/views/pages/homepage_folder/homepage.dart';
+import 'package:coal_tracking_app/views/pages/mine_official_homepage.dart';
 import 'package:coal_tracking_app/views/pages/profile_folder/profile.dart';
 import 'package:flutter/material.dart';
+
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
 import 'package:flutter_background_service/flutter_background_service.dart';
 // import 'package:frontend/views/pages/details_screen.dart';
 // import 'package:frontend/views/pages/expense_folder/expense_manager.dart';
@@ -29,7 +32,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:frontend/views/pages/splash_screen.dart';
 
 class NavigationContainer extends StatefulWidget {
-  const NavigationContainer({super.key});
+  final bool isMineOfficial;
+  const NavigationContainer({super.key, required this.isMineOfficial});
 
   @override
   State<NavigationContainer> createState() => _NavigationContainerState();
@@ -249,15 +253,21 @@ Future<void> initializeService() async {
 
 class _NavigationContainerState extends State<NavigationContainer> {
   var currentIndex = 0;
+  List screen = [];
+  final storage = FlutterSecureStorage();
 
   @override
   void initState() {
-    _determinePosition().then((value) async => await initializeService());
-
-    super.initState();
+    // List screen;
+    if (widget.isMineOfficial == false) {
+      screen = [const HomePage(), const Empty(), const Profile()];
+    } else {
+      screen = [const MineOfficialHomepage(), const Empty(), const Profile()];
+      _determinePosition().then((value) => initializeService());
+      super.initState();
+    }
   }
-
-  List screen = [const HomePage(), const Empty(), const Profile()];
+  // List screen = if()[const HomePage(), const Empty(), const Profile()];
 
   @override
   Widget build(BuildContext context) {
