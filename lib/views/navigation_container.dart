@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:coal_tracking_app/controllers/db_controller.dart';
+import 'package:coal_tracking_app/controllers/map_controller.dart';
 import 'package:coal_tracking_app/interface/backend_interface.dart';
 import 'package:coal_tracking_app/models/logs_model.dart';
 import 'package:coal_tracking_app/models/send_coordinates_reqeust_model.dart';
@@ -12,16 +13,15 @@ import 'package:coal_tracking_app/views/pages/homepage_folder/homepage.dart';
 import 'package:coal_tracking_app/views/pages/mine_official_homepage.dart';
 import 'package:coal_tracking_app/views/pages/profile_folder/profile.dart';
 import 'package:flutter/material.dart';
-
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
 import 'package:flutter_background_service/flutter_background_service.dart';
 // import 'package:frontend/views/pages/details_screen.dart';
 // import 'package:frontend/views/pages/expense_folder/expense_manager.dart';
 // import 'package:frontend/views/pages/explore_folder/explore.dart';
 import 'package:flutter_background_service_android/flutter_background_service_android.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // import 'package:frontend/views/pages/onboarding_folder/age.dart';
@@ -156,23 +156,24 @@ void onStart(ServiceInstance service) async {
 
     /// you can see this log in logcat
     print('FLUTTER BACKGROUND SERVICE: ${DateTime.now()}');
-    Position position;
-    await _determinePosition().then((value) {
-      position = value;
-      print("Current Location: ${value.latitude} ${value.longitude}");
-      sendCoordinates(
-        value.latitude.toString(),
-        value.longitude.toString(),
-      );
-    });
-    var locationDB = LocationDatabase();
-    LocationLogs location = LocationLogs(
-      orderId: '10',
-      latitude: 40.7128,
-      longitude: -74.0060,
-      timestamp: DateTime.now().millisecondsSinceEpoch,
-    );
-    await locationDB.insertLocation(location);
+    final mapController = Get.find<MapController>();
+    if (await mapController.getRideStatus()) {
+      await _determinePosition().then((value) async {
+        print("Current Location: ${value.latitude} ${value.longitude}");
+        await sendCoordinates(
+          value.latitude.toString(),
+          value.longitude.toString(),
+        );
+        var locationDB = LocationDatabase();
+        LocationLogs location = LocationLogs(
+          orderId: '10',
+          latitude: value.latitude,
+          longitude: value.longitude,
+          timestamp: DateTime.now().millisecondsSinceEpoch,
+        );
+        await locationDB.insertLocation(location);
+      });
+    }
     // test using external plugin
     // final deviceInfo = DeviceInfoPlugin();
     // String? device;

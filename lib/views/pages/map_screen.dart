@@ -3,7 +3,6 @@ import 'dart:ui' as ui;
 
 import 'package:coal_tracking_app/controllers/map_controller.dart';
 import 'package:coal_tracking_app/interface/backend_interface.dart';
-import 'package:coal_tracking_app/models/map_screen_response_model.dart';
 import 'package:coal_tracking_app/models/send_coordinates_reqeust_model.dart';
 import 'package:coal_tracking_app/models/send_coordinates_resposne_model.dart';
 import 'package:coal_tracking_app/utils/constants.dart';

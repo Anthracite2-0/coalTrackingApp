@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:coal_tracking_app/models/accept_ride_model.dart';
 import 'package:coal_tracking_app/models/accept_ride_response.dart';
@@ -8,7 +7,6 @@ import 'package:coal_tracking_app/models/map_screen_response_model.dart';
 import 'package:coal_tracking_app/models/send_coordinates_reqeust_model.dart';
 import 'package:coal_tracking_app/models/send_coordinates_resposne_model.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
 import 'package:http/http.dart' as http;
 
 class BackendInterface {

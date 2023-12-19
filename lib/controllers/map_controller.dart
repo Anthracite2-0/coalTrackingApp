@@ -1,11 +1,9 @@
 import 'package:coal_tracking_app/interface/backend_interface.dart';
 import 'package:coal_tracking_app/models/map_screen_request_model.dart';
 import 'package:coal_tracking_app/models/map_screen_response_model.dart';
-import 'package:coal_tracking_app/models/send_coordinates_reqeust_model.dart';
-import 'package:coal_tracking_app/models/send_coordinates_resposne_model.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MapController extends GetxController {
   var isLoading = false.obs;
@@ -13,14 +11,32 @@ class MapController extends GetxController {
   var initialLong = "".obs;
   var finalLat = "".obs;
   var finalLong = "".obs;
+
   //var mapScreenResponseModel;
 
-  final storage = FlutterSecureStorage();
+  final storage = const FlutterSecureStorage();
 
   @override
   void onInit() async {
     super.onInit();
     getMapData();
+  }
+
+  void rideStarted() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool("rideStarted", true);
+  }
+
+  void rideEnded() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool("rideStarted", false);
+  }
+
+  Future<bool> getRideStatus() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.reload();
+    print("rideStarted: ${prefs.getBool("rideStarted")} ");
+    return prefs.getBool("rideStarted") ?? false;
   }
 
   Future<void> getMapData() async {
