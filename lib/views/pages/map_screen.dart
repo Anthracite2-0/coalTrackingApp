@@ -2,7 +2,10 @@ import 'dart:async';
 import 'dart:ui' as ui;
 
 import 'package:coal_tracking_app/controllers/map_controller.dart';
+import 'package:coal_tracking_app/interface/backend_interface.dart';
 import 'package:coal_tracking_app/models/map_screen_response_model.dart';
+import 'package:coal_tracking_app/models/send_coordinates_reqeust_model.dart';
+import 'package:coal_tracking_app/models/send_coordinates_resposne_model.dart';
 import 'package:coal_tracking_app/utils/constants.dart';
 import 'package:coal_tracking_app/views/widgets/loading.dart';
 import 'package:custom_info_window/custom_info_window.dart';
@@ -36,6 +39,8 @@ class _MapScreenState extends State<MapScreen> {
   double initialLong = 0.0;
   double finalLat = 0.0;
   double finalLong = 0.0;
+  double x = 24.00;
+  double y = 79.00;
 
   List<String> images = [
     'assets/images/box-truck.png',
@@ -91,7 +96,7 @@ class _MapScreenState extends State<MapScreen> {
   @override
   void initState() {
     super.initState();
-
+    print("In mapscreen ");
     _mapController.getMapData().then((_) => _loadData());
     // initialLat = double.parse(_mapController.initialLtd.value);
     // initialLong = double.parse(_mapController.initialLong.value);
@@ -155,7 +160,10 @@ class _MapScreenState extends State<MapScreen> {
     setState(() {});
 
     Timer.periodic(const Duration(seconds: 5), (timer) {
+      sendCoordinates(
+          position.latitude.toString(), position.longitude.toString());
       _updateData();
+      print("Hooo");
     });
   }
 
@@ -172,6 +180,22 @@ class _MapScreenState extends State<MapScreen> {
     await _addMarker(LatLng(finalLat, finalLong), "destination",
         BitmapDescriptor.defaultMarkerWithHue(90));
     setState(() {});
+  }
+
+  Future<void> sendCoordinates(String lat, String long) async {
+    SendCoordinatesRequestModel sendCoordinatesRequestModel =
+        SendCoordinatesRequestModel(
+            currentLat: x.toString(), currentLong: y.toString());
+    SendCoordinatesResponseModel sendCoordinatesResponseModel =
+        await BackendInterface.sendCoordinates(
+            sendCoordinatesRequestModel, "10");
+    print(x);
+    setState(() {
+      x = x + 0.05;
+      y = y + 0.05;
+    });
+
+    return;
   }
 
   @override
@@ -233,6 +257,7 @@ class _MapScreenState extends State<MapScreen> {
             ]);
           }
         }),
+
         // floatingActionButton: FloatingActionButton.extended(
         //   onPressed: () async {
         //     setState(() {});
