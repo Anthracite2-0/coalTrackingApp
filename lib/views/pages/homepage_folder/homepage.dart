@@ -1,4 +1,5 @@
 // import 'package:coal_tracking_app/current_location.dart';
+import 'package:coal_tracking_app/controllers/home_controller.dart';
 import 'package:coal_tracking_app/views/pages/homepage_folder/chat.dart';
 import 'package:coal_tracking_app/views/pages/homepage_folder/logs_page.dart';
 import 'package:coal_tracking_app/views/pages/homepage_folder/notifications.dart';
@@ -18,6 +19,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final HomeController homeController = Get.put(HomeController());
+
   @override
   Widget build(BuildContext context) {
     var w = MediaQuery.of(context).size.width;
@@ -186,7 +189,7 @@ class _HomePageState extends State<HomePage> {
                         height: 16,
                       ),
                       Text(
-                        "${DateTime.now().hour.isGreaterThan(12) ? DateTime.now().hour - 12 : DateTime.now().hour == 0 ? 12 : DateTime.now().hour}:${DateTime.now().minute} ${DateTime.now().hour.isGreaterThan(12) ? "PM" : "AM"}",
+                        "${homeController.currentTime.value.hour.isGreaterThan(12) ? homeController.currentTime.value.hour - 12 : homeController.currentTime.value.hour == 0 ? 12 : homeController.currentTime.value.hour}:${homeController.currentTime.value.minute < 10 ? "0${homeController.currentTime.value.minute}" : homeController.currentTime.value.minute} ${homeController.currentTime.value.hour.isGreaterThan(12) ? "PM" : "AM"}",
                         style: const TextStyle(
                           color: Colors.black,
                           fontSize: 18,
@@ -371,9 +374,10 @@ class _HomePageState extends State<HomePage> {
                               Text(
                                 "SOS",
                                 style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 17),
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 17,
+                                ),
                               )
                             ],
                           ),

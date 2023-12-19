@@ -16,19 +16,22 @@ class AuthController extends GetxController {
     _checkAuthenticated();
   }
 
-  void login(String username, String password) async {
+  Future<String?> login(
+      String phoneNumber, String password, bool isMineOfficial) async {
     try {
       // Simulated API call to get token
-      String token = await _getTokenFromAPI(username, password);
+      String token = await _getTokenFromAPI(phoneNumber, password);
 
       // Store token securely
       await _secureStorage.write(key: 'token', value: token);
 
       // Update authState
       _authState.value = AuthState.authenticated;
+      return token;
     } catch (e) {
       // Handle error
       _authState.value = AuthState.unauthenticated;
+      return null;
     }
   }
 
@@ -46,9 +49,13 @@ class AuthController extends GetxController {
     _authState.value = AuthState.unauthenticated;
   }
 
-  Future<String> _getTokenFromAPI(String username, String password) async {
+  Future<String?> getTokenFromDB() async {
+    return await _secureStorage.read(key: 'token');
+  }
+
+  Future<String> _getTokenFromAPI(String phoneNumber, String password) async {
     // Simulated API call, replace with actual API call
     await Future.delayed(const Duration(seconds: 2));
-    return 'your_generated_token';
+    return phoneNumber;
   }
 }

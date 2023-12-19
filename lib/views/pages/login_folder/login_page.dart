@@ -1,14 +1,8 @@
-// import 'package:frontend/models/login_request_model.dart';
-// import 'package:frontend/models/login_response_model.dart';
-// import 'package:frontend/navigation_container.dart';
 import 'package:coal_tracking_app/controllers/login_controller.dart';
 import 'package:coal_tracking_app/utils/constants.dart';
-// import 'package:coal_tracking_app/current_location.dart';
 import 'package:coal_tracking_app/views/navigation_container.dart';
-
 import 'package:coal_tracking_app/views/widgets/my_button.dart';
 import 'package:coal_tracking_app/views/widgets/my_textfield.dart';
-import 'package:coal_tracking_app/views/widgets/square_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
@@ -24,7 +18,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   bool isApiCallProcess = false;
   // text editing controllers
-  final emailController = TextEditingController();
+  final phoneController = TextEditingController();
   final passwordController = TextEditingController();
   String email = "";
   String password = "";
@@ -52,9 +46,7 @@ class _LoginPageState extends State<LoginPage> {
                   size: 100,
                   color: dark,
                 ),
-                Container(
-                  child: Text("Driver Login"),
-                ),
+                const Text("Driver Login"),
 
                 const SizedBox(height: 50),
 
@@ -70,13 +62,15 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 25),
                 // username textField
                 MyTextField(
-                  controller: emailController,
-                  hintText: 'Username',
+                  controller: phoneController,
+                  keyboardType: TextInputType.phone,
+                  hintText: 'Phone Number',
                   obscureText: false,
                 ),
                 const SizedBox(height: 10),
                 // password textField
                 MyTextField(
+                  keyboardType: TextInputType.text,
                   controller: passwordController,
                   hintText: 'Password',
                   obscureText: true,
@@ -122,18 +116,50 @@ class _LoginPageState extends State<LoginPage> {
                   w: width * 0.9,
                   text: "Sign in",
                   onTap: () async {
-                    authController.login(
-                        emailController.text, passwordController.text);
-
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute<void>(
-                        builder: (BuildContext context) => NavigationContainer(
+                    if (!validateAndSave()) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("Please fill all the fields"),
+                        ),
+                      );
+                      return;
+                    }
+                    await authController
+                        .login(
+                      phoneController.text,
+                      passwordController.text,
+                      isMineOfficial,
+                    )
+                        .then((value) async {
+                      if (value != null) {
+                        await _storage.write(
+                          key: 'isMineOfficial',
+                          value: isMineOfficial.toString(),
+                        );
+                        await _storage.write(
+                          key: 'phone',
+                          value: phoneController.text,
+                        );
+                        await _storage.write(
+                          key: 'password',
+                          value: passwordController.text,
+                        );
+                      }
+                    });
+                    if (authController.authState == AuthState.authenticated) {
+                      Get.offAll(
+                        () => NavigationContainer(
                           isMineOfficial: isMineOfficial,
                         ),
-                      ),
-                      (route) => false,
-                    );
+                      );
+                    } else {
+                      if (!mounted) return;
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("Invalid Credentials"),
+                        ),
+                      );
+                    }
                   },
                 ),
                 const SizedBox(height: 50),
@@ -241,7 +267,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   bool validateAndSave() {
-    email = emailController.text;
+    email = phoneController.text;
     password = passwordController.text;
     if (email.isEmpty || password.isEmpty) {
       return false;
