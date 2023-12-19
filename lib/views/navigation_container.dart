@@ -156,23 +156,28 @@ void onStart(ServiceInstance service) async {
 
     /// you can see this log in logcat
     print('FLUTTER BACKGROUND SERVICE: ${DateTime.now()}');
-    final mapController = Get.find<MapController>();
-    if (await mapController.getRideStatus()) {
-      await _determinePosition().then((value) async {
-        print("Current Location: ${value.latitude} ${value.longitude}");
-        await sendCoordinates(
-          value.latitude.toString(),
-          value.longitude.toString(),
-        );
-        var locationDB = LocationDatabase();
-        LocationLogs location = LocationLogs(
-          orderId: '10',
-          latitude: value.latitude,
-          longitude: value.longitude,
-          timestamp: DateTime.now().millisecondsSinceEpoch,
-        );
-        await locationDB.insertLocation(location);
-      });
+    final MapController _mapController = Get.put(MapController());
+    if (await _mapController.getRideStatus()) {
+      print("logging");
+      await _determinePosition().then(
+        (value) async {
+          print("Current Location: ${value.latitude} ${value.longitude}");
+          await sendCoordinates(
+            value.latitude.toString(),
+            value.longitude.toString(),
+          );
+          var locationDB = LocationDatabase();
+          LocationLogs location = LocationLogs(
+            orderId: '10',
+            latitude: value.latitude,
+            longitude: value.longitude,
+            timestamp: DateTime.now().millisecondsSinceEpoch,
+          );
+          await locationDB.insertLocation(location);
+        },
+      );
+    } else {
+      print("no logging");
     }
     // test using external plugin
     // final deviceInfo = DeviceInfoPlugin();
@@ -263,9 +268,10 @@ class _NavigationContainerState extends State<NavigationContainer> {
     // List screen;
     if (widget.isMineOfficial == false) {
       screen = [const HomePage(), const Empty(), const Profile()];
+      _determinePosition().then((value) => initializeService());
     } else {
       screen = [const MineOfficialHomepage(), const Empty(), const Profile()];
-      _determinePosition().then((value) => initializeService());
+
       super.initState();
     }
   }

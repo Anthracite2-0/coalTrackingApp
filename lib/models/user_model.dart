@@ -21,7 +21,7 @@ class UserData {
   final String licenseImage;
   final int vehicleId;
   final String licenseNumber;
-  final int createdBy;
+  final int? createdBy;
   final dynamic updatedBy;
   final DateTime createdAt;
   final DateTime updatedAt;
