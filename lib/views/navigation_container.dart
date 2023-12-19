@@ -255,10 +255,8 @@ class _NavigationContainerState extends State<NavigationContainer> {
   List screen = [];
   final storage = FlutterSecureStorage();
 
-
   @override
   void initState() {
-    
     // List screen;
     if (widget.isMineOfficial == false) {
       screen = [const HomePage(), const Empty(), const Profile()];
@@ -267,8 +265,7 @@ class _NavigationContainerState extends State<NavigationContainer> {
       _determinePosition().then((value) => initializeService());
       super.initState();
     }
-
-
+  }
   // List screen = if()[const HomePage(), const Empty(), const Profile()];
 
   @override
