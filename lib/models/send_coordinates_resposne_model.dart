@@ -5,19 +5,22 @@ SendCoordinatesResponseModel sendCoordinatesResponseJson(String str) =>
 
 class SendCoordinatesResponseModel {
   bool? success;
-  List<int>? data;
+  // List<int>? data;
 
-  SendCoordinatesResponseModel({this.success, this.data});
+  SendCoordinatesResponseModel({
+    this.success,
+    // this.data,
+  });
 
   SendCoordinatesResponseModel.fromJson(Map<String, dynamic> json) {
     success = json['success'];
-    data = json['data'].cast<int>();
+    // data = json['data'].cast<int>();
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['success'] = this.success;
-    data['data'] = this.data;
+    // data['data'] = this.data;
     return data;
   }
 }
