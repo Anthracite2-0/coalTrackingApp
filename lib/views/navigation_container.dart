@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:coal_tracking_app/controllers/db_controller.dart';
+import 'package:coal_tracking_app/controllers/map_controller.dart';
 import 'package:coal_tracking_app/interface/backend_interface.dart';
 import 'package:coal_tracking_app/models/logs_model.dart';
 import 'package:coal_tracking_app/models/send_coordinates_reqeust_model.dart';
@@ -18,6 +19,7 @@ import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_background_service_android/flutter_background_service_android.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:frontend/views/pages/onboarding_folder/age.dart';
 // import 'package:frontend/views/pages/onboarding_folder/details.dart';
@@ -148,23 +150,24 @@ void onStart(ServiceInstance service) async {
 
     /// you can see this log in logcat
     print('FLUTTER BACKGROUND SERVICE: ${DateTime.now()}');
-    Position position;
-    await _determinePosition().then((value) {
-      position = value;
-      print("Current Location: ${value.latitude} ${value.longitude}");
-      sendCoordinates(
-        value.latitude.toString(),
-        value.longitude.toString(),
-      );
-    });
-    var locationDB = LocationDatabase();
-    LocationLogs location = LocationLogs(
-      orderId: '10',
-      latitude: 40.7128,
-      longitude: -74.0060,
-      timestamp: DateTime.now().millisecondsSinceEpoch,
-    );
-    await locationDB.insertLocation(location);
+    final mapController = Get.find<MapController>();
+    if (await mapController.getRideStatus()) {
+      await _determinePosition().then((value) async {
+        print("Current Location: ${value.latitude} ${value.longitude}");
+        await sendCoordinates(
+          value.latitude.toString(),
+          value.longitude.toString(),
+        );
+        var locationDB = LocationDatabase();
+        LocationLogs location = LocationLogs(
+          orderId: '10',
+          latitude: value.latitude,
+          longitude: value.longitude,
+          timestamp: DateTime.now().millisecondsSinceEpoch,
+        );
+        await locationDB.insertLocation(location);
+      });
+    }
     // test using external plugin
     // final deviceInfo = DeviceInfoPlugin();
     // String? device;
@@ -249,7 +252,7 @@ class _NavigationContainerState extends State<NavigationContainer> {
 
   @override
   void initState() {
-    _determinePosition().then((value) => initializeService());
+    _determinePosition().then((value) async => await initializeService());
 
     super.initState();
   }
