@@ -1,6 +1,8 @@
 import 'package:coal_tracking_app/interface/backend_interface.dart';
 import 'package:coal_tracking_app/models/map_screen_request_model.dart';
 import 'package:coal_tracking_app/models/map_screen_response_model.dart';
+import 'package:coal_tracking_app/models/send_coordinates_reqeust_model.dart';
+import 'package:coal_tracking_app/models/send_coordinates_resposne_model.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:get/get.dart';
@@ -37,4 +39,18 @@ class MapController extends GetxController {
     }
     return;
   }
+
+  // Future<void> sendCoordinates(String lat, String long) async {
+  //   try {
+  //     isLoading(true);
+  //     SendCoordinatesRequestModel sendCoordinatesRequestModel =
+  //         SendCoordinatesRequestModel(currentLat: lat, currentLong: long);
+  //     SendCoordinatesResponseModel sendCoordinatesResponseModel =
+  //         await BackendInterface.sendCoordinates(
+  //             sendCoordinatesRequestModel, "10");
+  //   } finally {
+  //     isLoading(false);
+  //   }
+  //   return;
+  // }
 }
