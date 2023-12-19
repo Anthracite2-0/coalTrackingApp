@@ -1,12 +1,29 @@
+import 'dart:async';
+import 'dart:io';
+import 'dart:ui';
+
+import 'package:coal_tracking_app/controllers/db_controller.dart';
+import 'package:coal_tracking_app/interface/backend_interface.dart';
+import 'package:coal_tracking_app/models/logs_model.dart';
+import 'package:coal_tracking_app/models/send_coordinates_reqeust_model.dart';
+import 'package:coal_tracking_app/models/send_coordinates_resposne_model.dart';
 import 'package:coal_tracking_app/views/pages/empty.dart';
-// import 'package:frontend/views/pages/details_screen.dart';
-// import 'package:frontend/views/pages/expense_folder/expense_manager.dart';
-// import 'package:frontend/views/pages/explore_folder/explore.dart';
 import 'package:coal_tracking_app/views/pages/homepage_folder/homepage.dart';
 import 'package:coal_tracking_app/views/pages/mine_official_homepage.dart';
 import 'package:coal_tracking_app/views/pages/profile_folder/profile.dart';
 import 'package:flutter/material.dart';
+
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+import 'package:flutter_background_service/flutter_background_service.dart';
+// import 'package:frontend/views/pages/details_screen.dart';
+// import 'package:frontend/views/pages/expense_folder/expense_manager.dart';
+// import 'package:frontend/views/pages/explore_folder/explore.dart';
+import 'package:flutter_background_service_android/flutter_background_service_android.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 // import 'package:frontend/views/pages/onboarding_folder/age.dart';
 // import 'package:frontend/views/pages/onboarding_folder/details.dart';
 
@@ -22,22 +39,235 @@ class NavigationContainer extends StatefulWidget {
   State<NavigationContainer> createState() => _NavigationContainerState();
 }
 
+@pragma('vm:entry-point')
+Future<bool> onIosBackground(ServiceInstance service) async {
+  WidgetsFlutterBinding.ensureInitialized();
+  DartPluginRegistrant.ensureInitialized();
+
+  SharedPreferences preferences = await SharedPreferences.getInstance();
+  await preferences.reload();
+  final log = preferences.getStringList('log') ?? <String>[];
+  log.add(DateTime.now().toIso8601String());
+  await preferences.setStringList('log', log);
+
+  return true;
+}
+
+Future<Position> _determinePosition() async {
+  bool serviceEnabled;
+  LocationPermission permission;
+
+  serviceEnabled = await Geolocator.isLocationServiceEnabled();
+
+  if (!serviceEnabled) {
+    return Future.error('Location services are disabled');
+  }
+
+  permission = await Geolocator.checkPermission();
+
+  if (permission == LocationPermission.denied) {
+    permission = await Geolocator.requestPermission();
+
+    if (permission == LocationPermission.denied) {
+      return Future.error("Location permission denied");
+    }
+  }
+
+  if (permission == LocationPermission.deniedForever) {
+    return Future.error('Location permissions are permanently denied');
+  }
+
+  Position position = await Geolocator.getCurrentPosition();
+
+  return position;
+}
+
+Future<void> sendCoordinates(String lat, String long) async {
+  SendCoordinatesRequestModel sendCoordinatesRequestModel =
+      SendCoordinatesRequestModel(
+    currentLat: lat,
+    currentLong: long,
+  );
+  SendCoordinatesResponseModel sendCoordinatesResponseModel =
+      await BackendInterface.sendCoordinates(sendCoordinatesRequestModel, "10");
+  // print(x);
+
+  return;
+}
+
+@pragma('vm:entry-point')
+void onStart(ServiceInstance service) async {
+  // Only available for flutter 3.0.0 and later
+  DartPluginRegistrant.ensureInitialized();
+
+  // For flutter prior to version 3.0.0
+  // We have to register the plugin manually
+
+  SharedPreferences preferences = await SharedPreferences.getInstance();
+  await preferences.setString("hello", "world");
+
+  /// OPTIONAL when use custom notification
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
+  if (service is AndroidServiceInstance) {
+    service.on('setAsForeground').listen((event) {
+      service.setAsForegroundService();
+    });
+
+    service.on('setAsBackground').listen((event) {
+      service.setAsBackgroundService();
+    });
+  }
+
+  service.on('stopService').listen((event) {
+    service.stopSelf();
+  });
+
+  // bring to foreground
+  Timer.periodic(const Duration(seconds: 5), (timer) async {
+    if (service is AndroidServiceInstance) {
+      if (await service.isForegroundService()) {
+        /// OPTIONAL for use custom notification
+        /// the notification id must be equals with AndroidConfiguration when you call configure() method.
+        flutterLocalNotificationsPlugin.show(
+          888,
+          'COOL SERVICE',
+          'Awesome ${DateTime.now()}',
+          const NotificationDetails(
+            android: AndroidNotificationDetails(
+              'location_logs',
+              'LOCATION LOG SERVICE',
+              icon: 'ic_bg_service_small',
+              ongoing: true,
+            ),
+          ),
+        );
+
+        // if you don't using custom notification, uncomment this
+        service.setForegroundNotificationInfo(
+          title: "My App Service",
+          content: "Updated at ${DateTime.now()}",
+        );
+      }
+    }
+
+    /// you can see this log in logcat
+    print('FLUTTER BACKGROUND SERVICE: ${DateTime.now()}');
+    Position position;
+    await _determinePosition().then((value) {
+      position = value;
+      print("Current Location: ${value.latitude} ${value.longitude}");
+      sendCoordinates(
+        value.latitude.toString(),
+        value.longitude.toString(),
+      );
+    });
+    var locationDB = LocationDatabase();
+    LocationLogs location = LocationLogs(
+      orderId: '10',
+      latitude: 40.7128,
+      longitude: -74.0060,
+      timestamp: DateTime.now().millisecondsSinceEpoch,
+    );
+    await locationDB.insertLocation(location);
+    // test using external plugin
+    // final deviceInfo = DeviceInfoPlugin();
+    // String? device;
+    // if (Platform.isAndroid) {
+    //   final androidInfo = await deviceInfo.androidInfo;
+    //   print('Running on ${androidInfo.id}');
+    //   device = androidInfo.model;
+    // }
+    //
+    // if (Platform.isIOS) {
+    //   final iosInfo = await deviceInfo.iosInfo;
+    //   device = iosInfo.model;
+    // }
+
+    service.invoke(
+      'update',
+      {
+        "current_date": DateTime.now().toIso8601String(),
+        // "device": device,
+      },
+    );
+  });
+}
+
+Future<void> initializeService() async {
+  final service = FlutterBackgroundService();
+
+  /// OPTIONAL, using custom notification channel id
+  const AndroidNotificationChannel channel = AndroidNotificationChannel(
+    'location_logs', // id
+    'LOCATION LOG SERVICE', // title
+    description: 'This channel is used for Location logging.', // description
+    importance: Importance.high, // importance must be at low or higher level
+  );
+
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
+  if (Platform.isIOS || Platform.isAndroid) {
+    await flutterLocalNotificationsPlugin.initialize(
+      const InitializationSettings(
+        iOS: DarwinInitializationSettings(),
+        android: AndroidInitializationSettings('ic_bg_service_small'),
+      ),
+    );
+  }
+
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
+      ?.createNotificationChannel(channel);
+
+  await service.configure(
+    androidConfiguration: AndroidConfiguration(
+      // this will be executed when app is in foreground or background in separated isolate
+      onStart: onStart,
+
+      // auto start service
+      autoStart: true,
+      isForegroundMode: true,
+
+      notificationChannelId: 'location_logs',
+      initialNotificationTitle: 'AWESOME SERVICE',
+      initialNotificationContent: 'Initializing',
+      foregroundServiceNotificationId: 888,
+    ),
+    iosConfiguration: IosConfiguration(
+      // auto start service
+      autoStart: true,
+
+      // this will be executed when app is in foreground in separated isolate
+      onForeground: onStart,
+
+      // you have to enable background fetch capability on xcode project
+      onBackground: onIosBackground,
+    ),
+  );
+}
+
 class _NavigationContainerState extends State<NavigationContainer> {
   var currentIndex = 0;
   List screen = [];
   final storage = FlutterSecureStorage();
 
-  //
+
   @override
   void initState() {
-    super.initState();
+    
     // List screen;
     if (widget.isMineOfficial == false) {
       screen = [const HomePage(), const Empty(), const Profile()];
     } else {
       screen = [const MineOfficialHomepage(), const Empty(), const Profile()];
+      _determinePosition().then((value) => initializeService());
+      super.initState();
     }
-  }
+
 
   // List screen = if()[const HomePage(), const Empty(), const Profile()];
 

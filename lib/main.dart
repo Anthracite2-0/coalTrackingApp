@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:coal_tracking_app/views/navigation_container.dart';
 import 'package:coal_tracking_app/views/pages/login_folder/login_page.dart';
 import 'package:flutter/material.dart';
@@ -5,8 +7,9 @@ import 'package:get/get.dart';
 
 import 'controllers/login_controller.dart';
 
-void main() {
+Future<void> main() async {
   // WidgetsFlutterBinding.ensureInitialized();
+  // await initializeService();
   // var locationDB = LocationDatabase();
   // for (int i = 100; i < 200; i++) {
   //   LocationLogs location = LocationLogs(

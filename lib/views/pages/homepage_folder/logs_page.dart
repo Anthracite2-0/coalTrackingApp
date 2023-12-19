@@ -3,10 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class LogsPage extends StatelessWidget {
-  final LogsController logsController = Get.put(LogsController());
+class LogsPage extends StatefulWidget {
+  const LogsPage({super.key});
 
-  LogsPage({super.key});
+  @override
+  State<LogsPage> createState() => _LogsPageState();
+}
+
+class _LogsPageState extends State<LogsPage> {
+  final LogsController logsController = Get.put(LogsController());
+  @override
+  void initState() {
+    logsController.allOrderIds();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
