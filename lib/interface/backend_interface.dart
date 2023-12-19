@@ -80,14 +80,14 @@ class BackendInterface {
   }
 
   static Future<SendCoordinatesResponseModel> sendCoordinates(
-      SendCoordinatesRequestModel model, String orderId) async {
+      SendCoordinatesRequestModel model) async {
     // await Future.delayed(const Duration(seconds: 3));
     Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',
     };
 
     var url = Uri.parse(
-        'https://admin-server-production-a272.up.railway.app/api/v1/orderanddrivers/$orderId');
+        'https://admin-server-production-a272.up.railway.app/api/v1/orderanddrivers/');
 
     var response = await client.put(
       url,

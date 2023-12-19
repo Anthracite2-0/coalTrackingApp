@@ -198,10 +198,14 @@ class _MapScreenState extends State<MapScreen> {
   Future<void> sendCoordinates(String lat, String long) async {
     SendCoordinatesRequestModel sendCoordinatesRequestModel =
         SendCoordinatesRequestModel(
-            currentLat: x.toString(), currentLong: y.toString());
+            currentLat: x.toString(),
+            currentLong: y.toString(),
+            driverId: "9",
+            orderId: "10");
     SendCoordinatesResponseModel sendCoordinatesResponseModel =
         await BackendInterface.sendCoordinates(
-            sendCoordinatesRequestModel, "10");
+      sendCoordinatesRequestModel,
+    );
     print(x);
     setState(() {
       x = x + 0.05;
