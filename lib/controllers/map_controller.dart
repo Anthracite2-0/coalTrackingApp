@@ -34,7 +34,7 @@ class MapController extends GetxController {
 
   Future<bool> getRideStatus() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.reload();
+    // prefs.reload();
     print("rideStarted: ${prefs.getBool("rideStarted")} ");
     return prefs.getBool("rideStarted") ?? false;
   }

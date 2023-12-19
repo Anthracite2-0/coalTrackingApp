@@ -17,11 +17,14 @@ class ProfileController extends GetxController {
       if (response.statusCode == 200) {
         final jsonData = json.decode(response.body);
         userData.value = UserData.fromJson(jsonData['data']);
+        print("userData: ${userData.value!.toJson()}");
       } else {
         userData.value = null;
+        print("${response.statusCode}");
       }
     } catch (e) {
       userData.value = null;
+      print("Error: $e");
     }
     isLoading.value = false;
   }
