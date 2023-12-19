@@ -2,7 +2,9 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:coal_tracking_app/controllers/db_controller.dart';
 import 'package:coal_tracking_app/interface/backend_interface.dart';
+import 'package:coal_tracking_app/models/logs_model.dart';
 import 'package:coal_tracking_app/models/send_coordinates_reqeust_model.dart';
 import 'package:coal_tracking_app/models/send_coordinates_resposne_model.dart';
 import 'package:coal_tracking_app/views/pages/empty.dart';
@@ -117,7 +119,7 @@ void onStart(ServiceInstance service) async {
   });
 
   // bring to foreground
-  Timer.periodic(const Duration(seconds: 1), (timer) async {
+  Timer.periodic(const Duration(seconds: 5), (timer) async {
     if (service is AndroidServiceInstance) {
       if (await service.isForegroundService()) {
         /// OPTIONAL for use custom notification
@@ -146,14 +148,23 @@ void onStart(ServiceInstance service) async {
 
     /// you can see this log in logcat
     print('FLUTTER BACKGROUND SERVICE: ${DateTime.now()}');
-
+    Position position;
     await _determinePosition().then((value) {
+      position = value;
       print("Current Location: ${value.latitude} ${value.longitude}");
       sendCoordinates(
         value.latitude.toString(),
         value.longitude.toString(),
       );
     });
+    var locationDB = LocationDatabase();
+    LocationLogs location = LocationLogs(
+      orderId: '10',
+      latitude: 40.7128,
+      longitude: -74.0060,
+      timestamp: DateTime.now().millisecondsSinceEpoch,
+    );
+    await locationDB.insertLocation(location);
     // test using external plugin
     // final deviceInfo = DeviceInfoPlugin();
     // String? device;
