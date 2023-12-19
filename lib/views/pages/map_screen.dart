@@ -3,7 +3,6 @@ import 'dart:ui' as ui;
 
 import 'package:coal_tracking_app/controllers/map_controller.dart';
 import 'package:coal_tracking_app/interface/backend_interface.dart';
-import 'package:coal_tracking_app/models/map_screen_response_model.dart';
 import 'package:coal_tracking_app/models/send_coordinates_reqeust_model.dart';
 import 'package:coal_tracking_app/models/send_coordinates_resposne_model.dart';
 import 'package:coal_tracking_app/utils/constants.dart';
@@ -98,6 +97,7 @@ class _MapScreenState extends State<MapScreen> {
   void initState() {
     super.initState();
     print("In mapscreen ");
+    _mapController.rideStarted();
     _mapController.getMapData().then((_) => _loadData());
     // initialLat = double.parse(_mapController.initialLtd.value);
     // initialLong = double.parse(_mapController.initialLong.value);
