@@ -271,9 +271,8 @@ class _NavigationContainerState extends State<NavigationContainer> {
       _determinePosition().then((value) => initializeService());
     } else {
       screen = [const MineOfficialHomepage(), const Empty(), const Profile()];
-
-      super.initState();
     }
+    super.initState();
   }
   // List screen = if()[const HomePage(), const Empty(), const Profile()];
 

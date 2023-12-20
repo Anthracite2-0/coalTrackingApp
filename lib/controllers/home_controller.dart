@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:coal_tracking_app/models/all_orders_driver.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
@@ -24,6 +25,7 @@ class HomeController extends GetxController {
 
   RxBool isRiding = RxBool(false);
   RxBool isRidingLoading = RxBool(false);
+  Rx<AllOrdersDriver> allOrders = AllOrdersDriver(count: 0, rows: []).obs;
 
   Rx<DateTime> currentTime = DateTime.now().obs;
   @override
@@ -59,9 +61,20 @@ class HomeController extends GetxController {
   }
 
   Future<void> getAllOrders() async {
-    final res = await http.get(Uri.parse(
-        'https://admin-server-production-a272.up.railway.app/api/v1/drivers/rides/9'));
-    print(res.body);
+    try {
+      final res = await http.get(
+        Uri.parse(
+          'https://admin-server-production-a272.up.railway.app/api/v1/drivers/rides/9',
+        ),
+      );
+      if (res.statusCode == 200) {
+        allOrders = allOrdersDriverFromJson(res.body).obs;
+      } else {
+        print(res.statusCode);
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 
   void _updateTime(Timer timer) async {
