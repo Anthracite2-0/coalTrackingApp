@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:coal_tracking_app/views/navigation_container.dart';
 import 'package:coal_tracking_app/views/pages/login_folder/login_page.dart';
+import 'package:coal_tracking_app/views/pages/trip_details.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -47,14 +48,28 @@ class MyApp extends StatelessWidget {
         init: AuthController(),
         builder: (authController) {
           if (authController.authState == AuthState.authenticated) {
-            return NavigationContainer(
-              isMineOfficial: authController.isMineOfficial,
-            );
+            return TripDetails(
+                originLatitude: 26,
+                originLongitude: 26,
+                destLatitude: 26,
+                destLongitude: 26);
+            // NavigationContainer(
+            //   isMineOfficial: authController.isMineOfficial,
+            // );
           } else if (authController.authState == AuthState.unauthenticated) {
-            return const LoginPage();
+            return TripDetails(
+                originLatitude: 26,
+                originLongitude: 26,
+                destLatitude: 26,
+                destLongitude: 26);
+            ;
           }
           return const Center(
-            child: CircularProgressIndicator(),
+            child: TripDetails(
+                originLatitude: 26,
+                originLongitude: 26,
+                destLatitude: 26,
+                destLongitude: 26),
           );
         },
       ),
