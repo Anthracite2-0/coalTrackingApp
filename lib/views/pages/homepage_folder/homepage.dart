@@ -34,9 +34,11 @@ class _HomePageState extends State<HomePage> {
                   bottom: MediaQuery.of(context).size.height * 0.1),
               child: FloatingActionButton.extended(
                 backgroundColor: const Color(0xff161A30),
-                onPressed: () {
-                  Get.to(() => const QRScreen());
-                },
+                onPressed: homeController.isRiding
+                    ? () {
+                        Get.to(() => const QRScreen());
+                      }
+                    : null,
                 label: const Text("Scan the QR"),
                 icon: const Icon(Icons.qr_code_scanner_outlined),
               ),
@@ -296,9 +298,11 @@ class _HomePageState extends State<HomePage> {
                     height: 20,
                   ),
                   InkWell(
-                    onTap: () {
-                      Get.to(const MapScreen());
-                    },
+                    onTap: homeController.isRiding
+                        ? () {
+                            Get.to(const MapScreen());
+                          }
+                        : null,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10),
                       child: ColorFiltered(
@@ -520,7 +524,7 @@ class _HomePageState extends State<HomePage> {
   Widget promoCard(image, index, orderId, date) {
     return InkWell(
       onTap: () {
-        if (index == 0) {
+        if (index == 0 && homeController.isRiding) {
           Get.to(const MapScreen());
         }
       },
