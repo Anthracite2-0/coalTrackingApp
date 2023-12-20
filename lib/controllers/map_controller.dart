@@ -11,6 +11,7 @@ class MapController extends GetxController {
   var initialLong = "".obs;
   var finalLat = "".obs;
   var finalLong = "".obs;
+  var iterLoc = 0.obs;
 
   //var mapScreenResponseModel;
 
@@ -20,6 +21,10 @@ class MapController extends GetxController {
   void onInit() async {
     super.onInit();
     getMapData();
+  }
+
+  void incrementIterLoc() {
+    iterLoc.value++;
   }
 
   void rideStarted() async {
@@ -46,10 +51,14 @@ class MapController extends GetxController {
           MapScreenRequestModel(mobile: "9876567898", orderId: "10");
       MapScreenResponseModel mapScreenResponseModel =
           await BackendInterface.mapScreen(mapScreenRequestModel);
-      initialLtd.value = mapScreenResponseModel.data!.initialLat!.toString();
-      initialLong.value = mapScreenResponseModel.data!.initialLong!.toString();
-      finalLat.value = mapScreenResponseModel.data!.finalLat!.toString();
-      finalLong.value = mapScreenResponseModel.data!.finalLong!.toString();
+      // initialLtd.value = mapScreenResponseModel.data!.initialLat!.toString();
+      // initialLong.value = mapScreenResponseModel.data!.initialLong!.toString();
+      // finalLat.value = mapScreenResponseModel.data!.finalLat!.toString();
+      // finalLong.value = mapScreenResponseModel.data!.finalLong!.toString();
+      initialLtd.value = "23.85396378280531";
+      initialLong.value = "85.00255309746714";
+      finalLat.value = "23.657412166574847";
+      finalLong.value = "84.94272979898822";
     } finally {
       isLoading(false);
     }
