@@ -28,18 +28,20 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 235, 235, 235),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: Container(
-        margin:
-            EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.1),
-        child: FloatingActionButton.extended(
-          backgroundColor: const Color(0xff161A30),
-          onPressed: () {
-            Get.to(() => const QRScreen());
-          },
-          label: const Text("Scan the QR"),
-          icon: const Icon(Icons.qr_code_scanner_outlined),
-        ),
-      ),
+      floatingActionButton: (!homeController.isRiding)
+          ? Container(
+              margin: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).size.height * 0.1),
+              child: FloatingActionButton.extended(
+                backgroundColor: const Color(0xff161A30),
+                onPressed: () {
+                  Get.to(() => const QRScreen());
+                },
+                label: const Text("Scan the QR"),
+                icon: const Icon(Icons.qr_code_scanner_outlined),
+              ),
+            )
+          : null,
       appBar: AppBar(
         centerTitle: false,
         titleSpacing: 13.0,
@@ -116,139 +118,145 @@ class _HomePageState extends State<HomePage> {
               child: Stack(
                 alignment: Alignment.bottomRight,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      RichText(
-                        text: TextSpan(
-                          style: const TextStyle(color: Colors.black),
-                          children: [
-                            TextSpan(
-                              text: 'Hello, ',
-                              style: TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.w400,
-                                fontFamily: GoogleFonts.poppins().fontFamily,
-                              ),
-                            ),
-                            TextSpan(
-                              text: 'Suresh',
-                              style: TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.orange,
-                                fontFamily: GoogleFonts.poppins().fontFamily,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 8,
-                      ),
-                      RichText(
-                        text: const TextSpan(
-                          style: TextStyle(color: Colors.black),
-                          children: [
-                            TextSpan(
-                              text: 'You are currently ',
-                              style: TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.grey,
-                              ),
-                            ),
-                            TextSpan(
-                              text: 'online ',
-                              style: TextStyle(
-                                color: Colors.green,
-                                fontSize: 13,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            TextSpan(
-                              text: 'and heading towards Ghaziabad',
-                              style: TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.grey,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      // const Text(
-                      //   'You are currently online and heading\ntowards Ghaziabad',
-                      //   style: TextStyle(
-                      //     color: Colors.grey,
-                      //     fontSize: 15,
-                      //     fontWeight: FontWeight.bold,
-                      //   ),
-                      // ),
-                      const SizedBox(
-                        height: 16,
-                      ),
-                      Text(
-                        "${homeController.currentTime.value.hour.isGreaterThan(12) ? homeController.currentTime.value.hour - 12 : homeController.currentTime.value.hour == 0 ? 12 : homeController.currentTime.value.hour}:${homeController.currentTime.value.minute < 10 ? "0${homeController.currentTime.value.minute}" : homeController.currentTime.value.minute} ${homeController.currentTime.value.hour.isGreaterThan(12) ? "PM" : "AM"}",
-                        style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 8,
-                      ),
-                      // Container(
-                      //   padding: const EdgeInsets.all(5),
-                      //   decoration: BoxDecoration(
-                      //       color: const Color.fromRGBO(244, 243, 243, 1),
-                      //       borderRadius: BorderRadius.circular(15)),
-                      //   child: const TextField(
-                      //     decoration: InputDecoration(
-                      //         border: InputBorder.none,
-                      //         prefixIcon: Icon(
-                      //           Icons.search,
-                      //           color: Colors.black87,
-                      //         ),
-                      //         hintText: "Search you're looking for",
-                      //         hintStyle:
-                      //             TextStyle(color: Colors.grey, fontSize: 15)),
-                      //   ),
-                      // ),
-                      // const SizedBox(
-                      //   height: 10,
-                      // ),
-                    ],
-                  ),
                   Align(
-                    alignment: Alignment.bottomRight,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      decoration: BoxDecoration(
-                        color: const Color.fromRGBO(244, 243, 243, 1),
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: TextButton(
-                        onPressed: () {
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //     builder: (context) => const CurrentLocation(),
-                          //   ),
-                          // );
-                        },
-                        child: const Text(
-                          "12 km to Ghaz.",
-                          style: TextStyle(
+                    alignment: Alignment.topLeft,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        RichText(
+                          text: TextSpan(
+                            style: const TextStyle(color: Colors.black),
+                            children: [
+                              TextSpan(
+                                text: 'Hello, ',
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: GoogleFonts.poppins().fontFamily,
+                                ),
+                              ),
+                              TextSpan(
+                                text: 'Suresh',
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.orange,
+                                  fontFamily: GoogleFonts.poppins().fontFamily,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        RichText(
+                          text: TextSpan(
+                            style: const TextStyle(color: Colors.black),
+                            children: [
+                              const TextSpan(
+                                text: 'You are currently ',
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              const TextSpan(
+                                text: 'online ',
+                                style: TextStyle(
+                                  color: Colors.green,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              if (homeController.isRiding)
+                                const TextSpan(
+                                  text: 'and heading towards Ghaziabad',
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.grey,
+                                  ),
+                                )
+                            ],
+                          ),
+                        ),
+                        // const Text(
+                        //   'You are currently online and heading\ntowards Ghaziabad',
+                        //   style: TextStyle(
+                        //     color: Colors.grey,
+                        //     fontSize: 15,
+                        //     fontWeight: FontWeight.bold,
+                        //   ),
+                        // ),
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        Text(
+                          "${homeController.currentTime.value.hour.isGreaterThan(12) ? homeController.currentTime.value.hour - 12 : homeController.currentTime.value.hour == 0 ? 12 : homeController.currentTime.value.hour}:${homeController.currentTime.value.minute < 10 ? "0${homeController.currentTime.value.minute}" : homeController.currentTime.value.minute} ${homeController.currentTime.value.hour.isGreaterThan(12) ? "PM" : "AM"}",
+                          style: const TextStyle(
                             color: Colors.black,
-                            fontSize: 12,
+                            fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                      ),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        // Container(
+                        //   padding: const EdgeInsets.all(5),
+                        //   decoration: BoxDecoration(
+                        //       color: const Color.fromRGBO(244, 243, 243, 1),
+                        //       borderRadius: BorderRadius.circular(15)),
+                        //   child: const TextField(
+                        //     decoration: InputDecoration(
+                        //         border: InputBorder.none,
+                        //         prefixIcon: Icon(
+                        //           Icons.search,
+                        //           color: Colors.black87,
+                        //         ),
+                        //         hintText: "Search you're looking for",
+                        //         hintStyle:
+                        //             TextStyle(color: Colors.grey, fontSize: 15)),
+                        //   ),
+                        // ),
+                        // const SizedBox(
+                        //   height: 10,
+                        // ),
+                      ],
                     ),
-                  )
+                  ),
+                  homeController.isRiding
+                      ? Align(
+                          alignment: Alignment.bottomRight,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            decoration: BoxDecoration(
+                              color: const Color.fromRGBO(244, 243, 243, 1),
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: TextButton(
+                              onPressed: () {
+                                // Navigator.push(
+                                //   context,
+                                //   MaterialPageRoute(
+                                //     builder: (context) => const CurrentLocation(),
+                                //   ),
+                                // );
+                              },
+                              child: const Text(
+                                "12 km to Ghaz.",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                        )
+                      : Container()
                 ],
               ),
             ),
@@ -289,7 +297,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   InkWell(
                     onTap: () {
-                      Get.to(MapScreen());
+                      Get.to(const MapScreen());
                     },
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10),
@@ -454,7 +462,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       InkWell(
                         onTap: () {
-                          Get.to(LogsPage());
+                          Get.to(const LogsPage());
                         },
                         child: Container(
                           width: w * 0.4,
@@ -513,7 +521,7 @@ class _HomePageState extends State<HomePage> {
     return InkWell(
       onTap: () {
         if (index == 0) {
-          Get.to(MapScreen());
+          Get.to(const MapScreen());
         }
       },
       child: AspectRatio(
@@ -523,8 +531,9 @@ class _HomePageState extends State<HomePage> {
           decoration: BoxDecoration(
             border: Border.all(
                 width: 3,
-                color:
-                    (index == 0) ? Colors.green.shade400 : Colors.red.shade400),
+                color: (index == 0 && homeController.isRiding)
+                    ? Colors.green.shade400
+                    : Colors.red.shade400),
             borderRadius: BorderRadius.circular(10),
             image: DecorationImage(fit: BoxFit.cover, image: AssetImage(image)),
           ),
@@ -537,7 +546,7 @@ class _HomePageState extends State<HomePage> {
                   gradient: LinearGradient(
                     begin: Alignment.bottomRight,
                     stops: const [0.1, 0.9],
-                    colors: (index == 0)
+                    colors: (index == 0 && homeController.isRiding)
                         ? [
                             Colors.black.withOpacity(0),
                             Colors.black.withOpacity(0)
@@ -549,18 +558,18 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
-              (index == 0)
+              (index == 0 && homeController.isRiding)
                   ? Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Center(
                           child: Container(
-                            padding: EdgeInsets.all(2),
+                            padding: const EdgeInsets.all(2),
                             decoration: BoxDecoration(
                               color: Colors.green,
                               borderRadius: BorderRadius.circular(5),
                             ),
-                            child: Text(
+                            child: const Text(
                               "LIVE",
                               style: TextStyle(
                                   color: Colors.white,
@@ -568,7 +577,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                         ),
-                        Center(
+                        const Center(
                             child: SizedBox(
                           height: 4,
                         )),
@@ -580,27 +589,30 @@ class _HomePageState extends State<HomePage> {
                         Center(
                           child: Text(
                             "Order Id: $orderId",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
-                        Center(
+                        const Center(
                             child: SizedBox(
                           height: 2,
                         )),
                         Center(
                           child: Text(
                             "Date: $date",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
-                        Center(
-                            child: SizedBox(
-                          height: 4,
-                        )),
+                        const Center(
+                          child: SizedBox(
+                            height: 4,
+                          ),
+                        ),
                       ],
                     )
             ],
