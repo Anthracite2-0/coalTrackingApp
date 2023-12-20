@@ -26,9 +26,9 @@ class _ProfileState extends State<Profile> {
 
   @override
   void initState() {
-    (_) async => profileController
-        .fetchProfileData(await authController.getTokenFromDB() ?? "");
     super.initState();
+    (() async => profileController
+        .fetchProfileData(await authController.getTokenFromDB() ?? ""))();
   }
 
   @override

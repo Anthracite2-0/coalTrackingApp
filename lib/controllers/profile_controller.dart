@@ -8,6 +8,7 @@ class ProfileController extends GetxController {
   Rx<UserData?> userData = Rx<UserData?>(null);
   RxBool isLoading = RxBool(false);
   Future<void> fetchProfileData(String mobileNumber) async {
+    print("object");
     final url =
         'https://admin-server-production-a272.up.railway.app/api/v1/drivers/mobile/$mobileNumber';
     isLoading.value = true;

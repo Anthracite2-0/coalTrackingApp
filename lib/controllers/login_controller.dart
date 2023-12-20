@@ -50,7 +50,9 @@ class AuthController extends GetxController {
   }
 
   Future<String?> getTokenFromDB() async {
-    return await _secureStorage.read(key: 'token');
+    var token = await _secureStorage.read(key: 'token');
+    print(token);
+    return token;
   }
 
   Future<String> _getTokenFromAPI(String phoneNumber, String password) async {
