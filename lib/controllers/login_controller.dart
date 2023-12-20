@@ -44,7 +44,7 @@ class AuthController extends GetxController {
     // Check if token exists on app start
     String? token = await _secureStorage.read(key: 'token');
     print(token);
-    if (token!.isNotEmpty) {
+    if (token!.isNotEmpty || token != null) {
       print("checked auth state");
       _authState.value = AuthState.authenticated;
       _isMineOfficial.value =

@@ -34,11 +34,9 @@ class _HomePageState extends State<HomePage> {
                   bottom: MediaQuery.of(context).size.height * 0.1),
               child: FloatingActionButton.extended(
                 backgroundColor: const Color(0xff161A30),
-                onPressed: homeController.isRiding
-                    ? () {
-                        Get.to(() => const QRScreen());
-                      }
-                    : null,
+                onPressed: () {
+                  Get.to(() => const QRScreen());
+                },
                 label: const Text("Scan the QR"),
                 icon: const Icon(Icons.qr_code_scanner_outlined),
               ),
