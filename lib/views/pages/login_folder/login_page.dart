@@ -46,7 +46,7 @@ class _LoginPageState extends State<LoginPage> {
                   size: 100,
                   color: dark,
                 ),
-                const Text("Driver Login"),
+                Text(isMineOfficial ? "Mine Official Login" : "Driver Login"),
 
                 const SizedBox(height: 50),
 
@@ -103,7 +103,10 @@ class _LoginPageState extends State<LoginPage> {
                         //     setState(() => isMineOfficial = !isMineOfficial),
 
                         onChanged: (value) {
-                          setState(() => isMineOfficial = !isMineOfficial);
+                          setState(() {
+                            isMineOfficial = !isMineOfficial;
+                          });
+                          // setState(() => isMineOfficial = !isMineOfficial);
                         },
                       ),
                     ],
@@ -123,6 +126,17 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       );
                       return;
+                    }
+                    if (!isMineOfficial) {
+                      if (phoneController.text == "1234567891") {
+                        Future.delayed(const Duration(milliseconds: 800));
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Invalid Credentials"),
+                          ),
+                        );
+                        return;
+                      }
                     }
                     await authController
                         .login(

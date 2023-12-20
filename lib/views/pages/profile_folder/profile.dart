@@ -6,6 +6,7 @@
 import 'package:coal_tracking_app/controllers/login_controller.dart';
 import 'package:coal_tracking_app/controllers/profile_controller.dart';
 import 'package:coal_tracking_app/utils/constants.dart';
+import 'package:coal_tracking_app/views/pages/login_folder/login_page.dart';
 import 'package:coal_tracking_app/views/pages/profile_folder/profile_list_item.dart';
 import 'package:coal_tracking_app/views/widgets/loading.dart';
 import 'package:flutter/material.dart';
@@ -206,8 +207,10 @@ class _ProfileState extends State<Profile> {
                         onTap: () async => {
                           await authController.logout(),
                           if (mounted)
-                            Navigator.of(context).pushNamedAndRemoveUntil(
-                                '/login', (Route<dynamic> route) => false),
+                            Navigator.of(context).pushAndRemoveUntil(
+                                MaterialPageRoute(
+                                    builder: (context) => const LoginPage()),
+                                (Route<dynamic> route) => false),
                         },
                         child: const ProfileListItem(
                           icon: LineAwesomeIcons.alternate_sign_out,

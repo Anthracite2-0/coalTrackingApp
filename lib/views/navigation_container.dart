@@ -265,6 +265,7 @@ class _NavigationContainerState extends State<NavigationContainer> {
 
   @override
   void initState() {
+    super.initState();
     // List screen;
     if (widget.isMineOfficial == false) {
       screen = [const HomePage(), const Empty(), const Profile()];
@@ -272,7 +273,6 @@ class _NavigationContainerState extends State<NavigationContainer> {
     } else {
       screen = [const MineOfficialHomepage(), const Empty(), const Profile()];
     }
-    super.initState();
   }
   // List screen = if()[const HomePage(), const Empty(), const Profile()];
 

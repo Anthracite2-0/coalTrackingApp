@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:coal_tracking_app/interface/backend_interface.dart';
 import 'package:coal_tracking_app/models/train_location_request_model.dart';
 import 'package:coal_tracking_app/models/train_status_request_model.dart';
@@ -5,7 +7,6 @@ import 'package:coal_tracking_app/utils/constants.dart';
 import 'package:coal_tracking_app/views/pages/empty.dart';
 import 'package:coal_tracking_app/views/pages/homepage_folder/chat.dart';
 import 'package:coal_tracking_app/views/pages/homepage_folder/notifications.dart';
-import 'package:coal_tracking_app/views/pages/map_screen.dart';
 import 'package:coal_tracking_app/views/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -76,7 +77,7 @@ class _MineOfficialHomepageState extends State<MineOfficialHomepage> {
       ),
       body: Center(
         child: SingleChildScrollView(
-          child: Stack(children: [
+          child: Stack(alignment: Alignment.center, children: [
             Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -108,7 +109,7 @@ class _MineOfficialHomepageState extends State<MineOfficialHomepage> {
                         if (Response.message ==
                             "Train Status Updated Successfully") {
                           setState(() {
-                            //isApiCallProcess = false;
+                            isApiCallProcess = false;
                           });
                           Get.to(Empty());
                         } else {
@@ -179,8 +180,11 @@ class _MineOfficialHomepageState extends State<MineOfficialHomepage> {
                   // ),
                 ]),
             if (isApiCallProcess)
-              const Center(
-                child: Loading(),
+              Center(
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                  child: Loading(),
+                ),
               )
           ]),
         ),

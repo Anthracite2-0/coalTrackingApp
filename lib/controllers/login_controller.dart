@@ -47,6 +47,8 @@ class AuthController extends GetxController {
     if (token!.isNotEmpty) {
       print("checked auth state");
       _authState.value = AuthState.authenticated;
+      _isMineOfficial.value =
+          await _secureStorage.read(key: 'isMineOfficial') == 'true';
     }
   }
 
