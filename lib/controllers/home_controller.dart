@@ -23,10 +23,10 @@ class HomeController extends GetxController {
   RxBool isLocationServiceRequestingPermanentlyDeniedAndNeverAskAgainAndroid =
       RxBool(false);
 
-  RxBool isRiding = RxBool(false);
+  RxBool _isRiding = RxBool(false);
   RxBool isRidingLoading = RxBool(false);
   Rx<AllOrdersDriver> allOrders = AllOrdersDriver(count: 0, rows: []).obs;
-
+  bool get isRiding => _isRiding.value;
   Rx<DateTime> currentTime = DateTime.now().obs;
   @override
   void onInit() {
@@ -44,20 +44,20 @@ class HomeController extends GetxController {
 // }
   Future<void> setRidingTrue() async {
     isRidingLoading.value = true;
-    isRiding.value = true;
+    _isRiding.value = true;
     // await FlutterBackgroundService.start();
     isRidingLoading.value = false;
   }
 
   Future<void> setRidingFalse() async {
     isRidingLoading.value = true;
-    isRiding.value = false;
+    _isRiding.value = false;
     // await FlutterBackgroundService.stop();
     isRidingLoading.value = false;
   }
 
   Future<bool> checkRiding() async {
-    return isRiding.value;
+    return _isRiding.value;
   }
 
   Future<void> getAllOrders() async {
