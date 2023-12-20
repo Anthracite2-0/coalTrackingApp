@@ -45,11 +45,17 @@ class _TripDetailsState extends State<TripDetails> {
     super.initState();
 
     /// origin marker
-    _addMarker(LatLng(widget.originLatitude, widget.originLongitude), "origin",
+    // _addMarker(LatLng(widget.originLatitude, widget.originLongitude), "origin",
+    //     BitmapDescriptor.defaultMarker);
+
+    // /// destination marker
+    // _addMarker(LatLng(widget.destLatitude, widget.destLongitude), "destination",
+    //     BitmapDescriptor.defaultMarkerWithHue(90));
+    _addMarker(LatLng(23.85396378280531, 85.00255309746714), "origin",
         BitmapDescriptor.defaultMarker);
 
     /// destination marker
-    _addMarker(LatLng(widget.destLatitude, widget.destLongitude), "destination",
+    _addMarker(LatLng(23.657412166574847, 84.94272979898822), "destination",
         BitmapDescriptor.defaultMarkerWithHue(90));
     _getPolyline();
   }
@@ -71,8 +77,7 @@ class _TripDetailsState extends State<TripDetails> {
           body: Stack(alignment: Alignment.bottomCenter, children: [
         GoogleMap(
           initialCameraPosition: CameraPosition(
-              target: LatLng(widget.originLatitude, widget.originLongitude),
-              zoom: 15),
+              target: LatLng(23.85396378280531, 85.00255309746714), zoom: 15),
           myLocationEnabled: true,
           myLocationButtonEnabled: true,
           tiltGesturesEnabled: true,
@@ -225,8 +230,8 @@ class _TripDetailsState extends State<TripDetails> {
   _getPolyline() async {
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
         googleAPiKey,
-        PointLatLng(widget.originLatitude, widget.originLongitude),
-        PointLatLng(widget.destLatitude, widget.destLongitude),
+        PointLatLng(23.85396378280531, 85.00255309746714),
+        PointLatLng(23.657412166574847, 84.94272979898822),
         travelMode: TravelMode.driving,
         wayPoints: [PolylineWayPoint(location: "")]);
     if (result.points.isNotEmpty) {
