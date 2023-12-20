@@ -24,6 +24,13 @@ class MapScreen extends StatefulWidget {
   _MapScreenState createState() => _MapScreenState();
 }
 
+class LocationCoordinates {
+  double latitude;
+  double longitude;
+
+  LocationCoordinates(this.latitude, this.longitude);
+}
+
 class _MapScreenState extends State<MapScreen> {
   late GoogleMapController mapController;
   CustomInfoWindowController _customInfoWindowController =
@@ -38,11 +45,39 @@ class _MapScreenState extends State<MapScreen> {
   double initialLong = 0.0;
   double finalLat = 0.0;
   double finalLong = 0.0;
-  double x = 24.00;
-  double y = 79.00;
+  // double x = 24.00;
+  // double y = 79.00;
 
   List<String> images = [
     'assets/images/box-truck.png',
+  ];
+
+  List<LocationCoordinates> locationCoordinates = [
+    LocationCoordinates(23.85396378280531, 85.00255309746714),
+    LocationCoordinates(23.850426, 85.004055),
+    LocationCoordinates(23.846559, 85.001866),
+    LocationCoordinates(23.846264, 85.000844),
+    LocationCoordinates(23.844746, 84.996053),
+    LocationCoordinates(23.843114, 84.995305),
+    LocationCoordinates(23.838560, 84.997812),
+    LocationCoordinates(23.837830, 85.001955),
+    LocationCoordinates(23.835102, 85.004151),
+    LocationCoordinates(23.831736, 85.003627),
+    LocationCoordinates(23.828916, 85.003115),
+    LocationCoordinates(23.825812, 85.002803),
+    LocationCoordinates(23.822719, 85.001531),
+    LocationCoordinates(23.818433, 84.982927),
+    LocationCoordinates(23.809666, 84.966557),
+    LocationCoordinates(23.800168, 84.958173),
+    LocationCoordinates(23.785920, 84.941004),
+    LocationCoordinates(23.766921, 84.914253),
+    LocationCoordinates(23.711732, 84.923436),
+    LocationCoordinates(23.691259, 84.941004),
+    LocationCoordinates(23.678096, 84.950986),
+    LocationCoordinates(23.670143, 84.955577),
+    LocationCoordinates(23.658075, 84.954579),
+    LocationCoordinates(23.657527, 84.947792),
+    LocationCoordinates(23.657412166574847, 84.94272979898822),
   ];
 
   Uint8List? markerImage;
@@ -89,7 +124,6 @@ class _MapScreenState extends State<MapScreen> {
   @override
   void dispose() {
     _customInfoWindowController.dispose();
-
     super.dispose();
   }
 
@@ -142,10 +176,13 @@ class _MapScreenState extends State<MapScreen> {
         BitmapDescriptor.defaultMarkerWithHue(90));
 
     await _getPolyline();
-    Position position = await _determinePosition();
+    // Position position = await _determinePosition();
+    LocationCoordinates position = locationCoordinates[0];
 
     mapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
-        target: LatLng(position.latitude, position.longitude), zoom: 14)));
+        target: LatLng(double.parse(_mapController.initialLtd.value),
+            double.parse(_mapController.initialLong.value)),
+        zoom: 14)));
 
     markers.clear();
 
@@ -163,8 +200,8 @@ class _MapScreenState extends State<MapScreen> {
             double.parse(_mapController.finalLong.value)),
         "destination",
         BitmapDescriptor.defaultMarkerWithHue(90));
-    setState(() {});
 
+    setState(() {});
     Timer.periodic(const Duration(seconds: 5), (timer) {
       sendCoordinates(
           position.latitude.toString(), position.longitude.toString());
@@ -174,7 +211,12 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   Future<void> _updateData() async {
-    Position position = await _determinePosition();
+    final i = _mapController.iterLoc.value;
+    if (i == locationCoordinates.length) {
+      return;
+    }
+    // Position position = await _determinePosition();
+    LocationCoordinates position = locationCoordinates[i];
     markers.clear();
 
     await _addTruckMarker(
@@ -191,25 +233,31 @@ class _MapScreenState extends State<MapScreen> {
             double.parse(_mapController.finalLong.value)),
         "destination",
         BitmapDescriptor.defaultMarkerWithHue(90));
-    setState(() {});
+    setState(() {
+      _mapController.incrementIterLoc();
+    });
   }
 
   Future<void> sendCoordinates(String lat, String long) async {
+    // SendCoordinatesRequestModel sendCoordinatesRequestModel =
+    //     SendCoordinatesRequestModel(
+    //         currentLat: x.toString(),
+    //         currentLong: y.toString(),
+    //         driverId: "9",
+    //         orderId: "10");
     SendCoordinatesRequestModel sendCoordinatesRequestModel =
         SendCoordinatesRequestModel(
-            currentLat: x.toString(),
-            currentLong: y.toString(),
-            driverId: "9",
-            orderId: "10");
+            currentLat: lat, currentLong: long, driverId: "9", orderId: "10");
     SendCoordinatesResponseModel sendCoordinatesResponseModel =
         await BackendInterface.sendCoordinates(
       sendCoordinatesRequestModel,
     );
-    print(x);
-    setState(() {
-      x = x + 0.05;
-      y = y + 0.05;
-    });
+    setState(() {});
+    // print(x);
+    // setState(() {
+    //   x = x + 0.05;
+    //   y = y + 0.05;
+    // });
 
     return;
   }
@@ -229,7 +277,7 @@ class _MapScreenState extends State<MapScreen> {
                 myLocationEnabled: true,
                 myLocationButtonEnabled: true,
                 tiltGesturesEnabled: true,
-                mapType: MapType.hybrid,
+                mapType: MapType.terrain,
                 compassEnabled: true,
                 scrollGesturesEnabled: true,
                 zoomGesturesEnabled: true,

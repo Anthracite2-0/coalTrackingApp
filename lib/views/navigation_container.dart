@@ -269,7 +269,7 @@ class _NavigationContainerState extends State<NavigationContainer> {
     // List screen;
     if (widget.isMineOfficial == false) {
       screen = [const HomePage(), const Empty(), const Profile()];
-      _determinePosition().then((value) => initializeService());
+      // _determinePosition().then((value) => initializeService());
     } else {
       screen = [const MineOfficialHomepage(), const Empty(), const Profile()];
     }
