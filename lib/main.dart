@@ -47,12 +47,15 @@ class MyApp extends StatelessWidget {
         init: AuthController(),
         builder: (authController) {
           if (authController.authState == AuthState.authenticated) {
-            return NavigationContainer(
+            return const NavigationContainer(
               isMineOfficial: false,
             );
-          } else {
+          } else if (authController.authState == AuthState.unauthenticated) {
             return const LoginPage();
           }
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
         },
       ),
     );

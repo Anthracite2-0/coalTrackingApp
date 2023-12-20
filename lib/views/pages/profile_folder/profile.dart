@@ -70,137 +70,144 @@ class _ProfileState extends State<Profile> {
     // return ThemeSwitchingArea(
     return Scaffold(
       backgroundColor: const Color(0xff2B3460),
-      body: Obx(
-        () {
-          final userData = profileController.userData.value;
-          if (userData == null) {
-            if (profileController.isLoading.value == true) {
-              return const Center(child: Loading());
-            } else {
-              return const Center(child: Text("No data found"));
-            }
-          } else {
-            return SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                    height: width * 0.125,
-                    // color: Colors.transparent,
-                  ),
-                  header,
-                  Column(
+      body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        child: Column(
+          children: [
+            Obx(
+              () {
+                final userData = profileController.userData.value;
+                if (userData == null) {
+                  if (profileController.isLoading.value == true) {
+                    return const Center(child: Loading());
+                  } else {
+                    return const Center(child: Text("No data found"));
+                  }
+                } else {
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Container(
-                        height: width * 0.05,
-                        width: width * 0.01,
-                        color: Colors.amber,
+                        height: width * 0.125,
+                        // color: Colors.transparent,
                       ),
-                      SizedBox(
-                        height: width * 0.3,
-                        width: width * 0.3,
-                        //margin: EdgeInsets.only(top: width * 3),
-                        child: Stack(
-                          children: <Widget>[
-                            CircleAvatar(
-                              radius: width * 0.2,
-                              backgroundImage:
-                                  const AssetImage('assets/images/chicken.png'),
-                            ),
-                            Align(
-                              alignment: Alignment.bottomRight,
-                              child: Container(
-                                height: width * 0.10,
-                                width: width * 0.10,
-                                decoration: const BoxDecoration(
-                                  color: Colors.white,
-                                  shape: BoxShape.circle,
+                      header,
+                      Column(
+                        children: <Widget>[
+                          Container(
+                            height: width * 0.05,
+                            width: width * 0.01,
+                            color: Colors.amber,
+                          ),
+                          SizedBox(
+                            height: width * 0.3,
+                            width: width * 0.3,
+                            //margin: EdgeInsets.only(top: width * 3),
+                            child: Stack(
+                              children: <Widget>[
+                                CircleAvatar(
+                                  radius: width * 0.2,
+                                  backgroundImage: const AssetImage(
+                                      'assets/images/chicken.png'),
                                 ),
-                                child: Center(
-                                  heightFactor: width * 0.2,
-                                  widthFactor: width * 0.2,
-                                  child: Icon(
-                                    LineAwesomeIcons.pen,
-                                    color: kDarkPrimaryColor,
-                                    size: width * 0.05,
+                                Align(
+                                  alignment: Alignment.bottomRight,
+                                  child: Container(
+                                    height: width * 0.10,
+                                    width: width * 0.10,
+                                    decoration: const BoxDecoration(
+                                      color: Colors.white,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Center(
+                                      heightFactor: width * 0.2,
+                                      widthFactor: width * 0.2,
+                                      child: Icon(
+                                        LineAwesomeIcons.pen,
+                                        color: kDarkPrimaryColor,
+                                        size: width * 0.05,
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
+                              ],
                             ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: width * 0.02),
-                      Text(
-                        userData.fullName, //rempved ${}
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                          fontSize: width * 0.045,
-                        ),
-                      ),
-                      SizedBox(
-                        height: width * 0.025,
-                      ),
-                      Text(
-                        userData.mobile, ////rempved ${}
-                        style: TextStyle(
-                          // fontSize: ScreenUtil().setSp(kSpacingUnit.w * 1.5),
-                          fontWeight: FontWeight.w400,
-                          color: Colors.white,
-                          fontFamily: GoogleFonts.montserrat().fontFamily,
-                        ),
-                      ),
-                      SizedBox(
-                        height: width * 0.04,
-                      ),
-                      Container(
-                        height: width * 0.12,
-                        width: width * 0.45,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(width * 3),
-                          color: Colors.white,
-                        ),
-                        child: const Center(
-                          child: Text(
-                            'Upgrade to PRO',
+                          ),
+                          SizedBox(height: width * 0.02),
+                          Text(
+                            userData.fullName, //rempved ${}
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                              fontSize: width * 0.045,
+                            ),
+                          ),
+                          SizedBox(
+                            height: width * 0.025,
+                          ),
+                          Text(
+                            userData.mobile, ////rempved ${}
                             style: TextStyle(
                               // fontSize: ScreenUtil().setSp(kSpacingUnit.w * 1.5),
                               fontWeight: FontWeight.w400,
-                              color: Colors.black,
+                              color: Colors.white,
+                              fontFamily: GoogleFonts.montserrat().fontFamily,
                             ),
                           ),
-                        ),
+                          SizedBox(
+                            height: width * 0.04,
+                          ),
+                          Container(
+                            height: width * 0.12,
+                            width: width * 0.45,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(width * 3),
+                              color: Colors.white,
+                            ),
+                            child: const Center(
+                              child: Text(
+                                'Upgrade to PRO',
+                                style: TextStyle(
+                                  // fontSize: ScreenUtil().setSp(kSpacingUnit.w * 1.5),
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                  SizedBox(height: width * 0.05),
-                  Column(
-                    children: <Widget>[
-                      const ProfileListItem(
-                        icon: LineAwesomeIcons.user_shield,
-                        text: 'Privacy',
-                      ),
-                      const ProfileListItem(
-                        icon: LineAwesomeIcons.history,
-                        text: 'Purchase History',
-                      ),
-                      const ProfileListItem(
-                        icon: LineAwesomeIcons.question_circle,
-                        text: 'Help & Support',
-                      ),
-                      const ProfileListItem(
-                        icon: LineAwesomeIcons.cog,
-                        text: 'Settings',
-                      ),
-                      const ProfileListItem(
-                        icon: LineAwesomeIcons.user_plus,
-                        text: 'Invite a Friend',
+                      SizedBox(height: width * 0.05),
+                      Column(
+                        children: <Widget>[
+                          const ProfileListItem(
+                            icon: LineAwesomeIcons.user_shield,
+                            text: 'Privacy',
+                          ),
+                          const ProfileListItem(
+                            icon: LineAwesomeIcons.history,
+                            text: 'Purchase History',
+                          ),
+                          const ProfileListItem(
+                            icon: LineAwesomeIcons.question_circle,
+                            text: 'Help & Support',
+                          ),
+                          const ProfileListItem(
+                            icon: LineAwesomeIcons.cog,
+                            text: 'Settings',
+                          ),
+                          const ProfileListItem(
+                            icon: LineAwesomeIcons.user_plus,
+                            text: 'Invite a Friend',
+                          ),
+                        ],
                       ),
                       GestureDetector(
-                        onTap: () => {
-                          authController.logout(),
+                        onTap: () async => {
+                          await authController.logout(),
+                          if (mounted)
+                            Navigator.of(context).pushNamedAndRemoveUntil(
+                                '/login', (Route<dynamic> route) => false),
                         },
                         child: const ProfileListItem(
                           icon: LineAwesomeIcons.alternate_sign_out,
@@ -209,12 +216,12 @@ class _ProfileState extends State<Profile> {
                         ),
                       ),
                     ],
-                  )
-                ],
-              ),
-            );
-          }
-        },
+                  );
+                }
+              },
+            ),
+          ],
+        ),
       ),
     );
     // var profileInfo = Column(

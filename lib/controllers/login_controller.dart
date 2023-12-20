@@ -6,7 +6,9 @@ enum AuthState { authenticated, unauthenticated, loading }
 class AuthController extends GetxController {
   final Rx<AuthState> _authState = AuthState.unauthenticated.obs;
   final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
-
+  final RxString token = ''.obs;
+  final RxBool _isMineOfficial = false.obs;
+  bool get isMineOfficial => _isMineOfficial.value;
   AuthState get authState => _authState.value;
 
   @override
@@ -17,14 +19,17 @@ class AuthController extends GetxController {
   }
 
   Future<String?> login(
-      String phoneNumber, String password, bool isMineOfficial) async {
+      String phoneNumber, String password, bool isMineOfficialUser) async {
+    _authState.value = AuthState.loading;
     try {
       // Simulated API call to get token
       String token = await _getTokenFromAPI(phoneNumber, password);
 
       // Store token securely
-      await _secureStorage.write(key: 'token', value: token);
-
+      await _secureStorage.write(key: 'token', value: phoneNumber);
+      _isMineOfficial.value = isMineOfficialUser;
+      await _secureStorage.write(
+          key: 'isMineOfficial', value: isMineOfficialUser.toString());
       // Update authState
       _authState.value = AuthState.authenticated;
       return token;
@@ -38,20 +43,24 @@ class AuthController extends GetxController {
   Future<void> _checkAuthenticated() async {
     // Check if token exists on app start
     String? token = await _secureStorage.read(key: 'token');
-    if (token != null) {
+    print(token);
+    if (token!.isNotEmpty) {
+      print("checked auth state");
       _authState.value = AuthState.authenticated;
     }
   }
 
-  void logout() async {
+  Future<void> logout() async {
     // Remove token from secure storage
-    await _secureStorage.delete(key: 'token');
     _authState.value = AuthState.unauthenticated;
+    print("logout");
+    await _secureStorage.deleteAll();
+    _isMineOfficial.value = false;
   }
 
   Future<String?> getTokenFromDB() async {
     var token = await _secureStorage.read(key: 'token');
-    print(token);
+    print("token = $token");
     return token;
   }
 
