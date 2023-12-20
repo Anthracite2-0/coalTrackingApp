@@ -6,6 +6,10 @@ import 'package:coal_tracking_app/models/map_screen_request_model.dart';
 import 'package:coal_tracking_app/models/map_screen_response_model.dart';
 import 'package:coal_tracking_app/models/send_coordinates_reqeust_model.dart';
 import 'package:coal_tracking_app/models/send_coordinates_resposne_model.dart';
+import 'package:coal_tracking_app/models/train_location_request_model.dart';
+import 'package:coal_tracking_app/models/train_location_response_model.dart';
+import 'package:coal_tracking_app/models/train_status_request_model.dart';
+import 'package:coal_tracking_app/models/train_status_response_model.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
@@ -100,6 +104,58 @@ class BackendInterface {
       return sendCoordinatesResponseJson(response.body);
     } else {
       return sendCoordinatesResponseJson(response.body);
+    }
+  }
+
+  static Future<TrainStatusResponseModel> trainStatus(
+      TrainStatusRequestModel model) async {
+    // await Future.delayed(const Duration(seconds: 3));
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+    };
+
+    var url = Uri.parse(
+        'https://railway-server-production-25c2.up.railway.app/api/v1/train/status/1');
+
+    var response = await client.put(
+      url,
+      headers: requestHeaders,
+      body: jsonEncode(model.toJson()),
+    );
+    //http.Response acceptRideModel = response;
+
+    if (response.statusCode == 200) {
+      //SHARED
+
+      return trainStatusResponseJson(response.body);
+    } else {
+      return trainStatusResponseJson(response.body);
+    }
+  }
+
+  static Future<TrainLocationResponseModel> trainLocation(
+      TrainLocationRequestModel model) async {
+    // await Future.delayed(const Duration(seconds: 3));
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+    };
+
+    var url = Uri.parse(
+        'https://railway-server-production-25c2.up.railway.app/api/v1/train/location/1');
+
+    var response = await client.put(
+      url,
+      headers: requestHeaders,
+      body: jsonEncode(model.toJson()),
+    );
+    //http.Response acceptRideModel = response;
+
+    if (response.statusCode == 200) {
+      //SHARED
+
+      return trainLocationResponseJson(response.body);
+    } else {
+      return trainLocationResponseJson(response.body);
     }
   }
 }
